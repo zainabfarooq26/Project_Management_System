@@ -61,3 +61,5 @@ group :test do
 end
 
 gem "sassc", "~> 2.4"
+
+gem "letter_opener", "~> 1.10"
