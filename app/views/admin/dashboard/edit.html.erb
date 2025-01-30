@@ -1,0 +1,27 @@
+<h1>Edit User</h1>
+<%= form_for @user, url: admin_user_path(@user), method: :put do |f| %>
+  <div>
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+  <div>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </div>
+  <div>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
+  </div>
+  <div>
+    <%= f.label :active %>
+    <%= f.check_box :active %>
+  </div>
+  <div>
+    <%= f.label :is_manager %>
+    <%= f.check_box :is_manager %>
+  </div>
+  <div>
+    <%= f.submit 'Update User' %>
+  </div>
+<% end %>
+<%= link_to 'Back to Users', admin_users_path %>
