@@ -2,19 +2,21 @@ Rails.application.routes.draw do
   get "users/index"
   get "users/show"
   get "users/update"
-  devise_for :users,controllers: {
+
+  devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  # get "up" => "rails/health#show", as: :rails_health_check
-  # Render dynamic PWA files from app/views/pwa/*
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  root "home#index"
-  # config/routes.rb
-  resources :users, only: [:index, :show, :update]  # If you want admins to have access to index and update
 
-  # root "posts#index"
-end
+  root "home#index"
+
+  resources :users, only: [:index, :show, :update] 
+
+  namespace :admin do
+    get 'dashboard', to: 'dashboard#index'
+    resources :users, only: [:index] do
+      member do
+        patch :toggle_status # Route to enable/disable users
+      end
+    end  # <-- This closes the `resources :users` block
+  end  # <-- This closes the `namespace :admin` block
+end  # <-- This closes `Rails.application.routes.draw do`

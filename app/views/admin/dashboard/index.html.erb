@@ -1,0 +1,31 @@
+<h1>Admin Dashboard</h1>
+<p>Welcome admin, <%= current_user.email %>!</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.email %></texd>
+        <td>
+          <% if user.active? %>
+            <span class="badge bg-success">Active</span>
+          <% else %>
+            <span class="badge bg-danger">Disabled</span>
+          <% end %>
+        </td>
+        <td>
+          <%= button_to user.active? ? "Disable" : "Enable", toggle_status_admin_user_path(user), 
+                method: :patch, class: "btn btn-sm #{user.active? ? 'btn-danger' : 'btn-success'}" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
