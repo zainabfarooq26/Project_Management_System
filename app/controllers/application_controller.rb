@@ -16,8 +16,10 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if resource.admin?
       admin_dashboard_path # Redirect to admin dashboard
+    elsif resource.is_manager? 
+      manager_dashboard_index_path  # Redirect manager to manager dashboard
     else
-      root_path
+      root_path  # Redirect normal users to homepage
     end
   end
 
