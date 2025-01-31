@@ -22,7 +22,6 @@
             <a class="nav-link active" href="#">Event</a>
           </li>
         </ul>
-
         <form class="d-flex">
           <% if user_signed_in? %>
             <!-- Profile Picture as a Button (Trigger Modal) -->
@@ -67,9 +66,10 @@
             <% else %>
               <%= image_tag("default-avatar.png", class: "rounded-circle mb-3", width: 120, height: 120) %>
             <% end %>
+            <!-- Display First Name and Last Name -->
             <h5 class="card-title font-weight-bold text-dark">
-          <%= current_user.first_name.presence || 'First Name' %> <%= current_user.last_name.presence || 'Last Name' %>
-          </h5>
+              <%= current_user.profile&.name%> 
+            </h5>
 
             <p class="card-text text-muted">
               <strong>Email:</strong> <%= current_user.email %>
