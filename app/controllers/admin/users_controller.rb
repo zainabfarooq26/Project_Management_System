@@ -1,13 +1,11 @@
 class Admin::UsersController < ApplicationController
     before_action :authenticate_admin!
-    
     def index
       @users = User.where.not(admin: true)  # Excluding admin users
     end
     def new
         @user = User.new
       end
-    
     def create
         @user = User.new(user_params)
     
@@ -33,7 +31,6 @@ class Admin::UsersController < ApplicationController
           render :edit
         end
       end
-      
       def destroy
       @user = User.find(params[:id])
       @user.destroy
@@ -62,9 +59,8 @@ class Admin::UsersController < ApplicationController
           format.html { redirect_to admin_users_path, notice: 'User manager rights updated.' }
         end
       end
-  
+
     private
-  
     def user_params
         params.require(:user).permit(:name, :email, :role, :password, :password_confirmation)
       end

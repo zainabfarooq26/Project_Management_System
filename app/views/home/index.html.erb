@@ -49,7 +49,7 @@
   </nav>
 </div>
 
-<!-- Modal to Show Profile Details -->
+<!-- Profile Modal -->
 <div class="modal fade" id="profileDetailsModal" tabindex="-1" aria-labelledby="profileDetailsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -58,24 +58,24 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Card with Profile Details -->
+        <!-- Profile Info -->
         <div class="card shadow-sm border-light">
-          <div class="card-body text-center">
-            <% if current_user.profile_photo.attached? %>
-              <%= image_tag(current_user.profile_photo, class: "rounded-circle mb-3", width: 120, height: 120) %>
-            <% else %>
-              <%= image_tag("default-avatar.png", class: "rounded-circle mb-3", width: 120, height: 120) %>
-            <% end %>
-            <!-- Display First Name and Last Name -->
+              <div class="card-body text-center">
+                <% if current_user.profile.profile_photo.attached? %>
+                  <%= image_tag current_user.profile.profile_photo, class: "rounded-circle mb-3", width: 120, height: 120 %>
+                <% else %>
+                  <%= image_tag "default-avatar.png", class: "rounded-circle mb-3", width: 120, height: 120 %>
+                <% end %>
+            
+
             <h5 class="card-title font-weight-bold text-dark">
-              <%= current_user.profile&.name%> 
+              <%= current_user.profile.first_name %> <%= current_user.profile.last_name %>
             </h5>
 
             <p class="card-text text-muted">
               <strong>Email:</strong> <%= current_user.email %>
             </p>
 
-            <!-- Display User Role (Admin, Manager, User) -->
             <p class="card-text">
               <strong>Role:</strong>
               <% if current_user.admin? %>
@@ -88,7 +88,7 @@
             </p>
 
             <!-- Edit Profile Button -->
-            <%= link_to 'Edit Profile', edit_profile_path(current_user), class: "btn btn-primary mt-3 px-4" %>
+            <%= link_to 'Edit Profile', edit_profile_path(current_user.profile), class: "btn btn-primary mt-3 px-4" %>
           </div>
         </div>
       </div>
@@ -98,6 +98,8 @@
     </div>
   </div>
 </div>
+
+    
 
 <!-- Include Bootstrap's JS for Modal Functionality -->
 <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-k6RqeWeci5ZR/Lv4MR0sA6A57eegAwrjANPrc6wF/qFV7bE0JH07hPH2oTQZ7OYt", crossorigin: "anonymous" %>
