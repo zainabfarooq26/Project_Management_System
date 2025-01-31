@@ -4,8 +4,13 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   validates :active, inclusion: { in: [true, false] }
+  has_one_attached :profile_photo
+  attr_accessor :first_name, :last_name
+  def manager?
+    is_manager == true
+  end
   def locked?
     !self.active? # Returns true if user is inactive (locked)
   end    
-    has_many :clients, dependent: :destroy  # A manager can have many clients 
+  has_many :clients, dependent: :destroy  # A manager can have many clients 
 end

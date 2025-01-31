@@ -6,7 +6,8 @@ gem "rails", "~> 7.2.0"
 gem "sprockets-rails"
 gem "bootstrap"
 gem "sassc-rails"
-
+gem "image_processing", "~> 1.2"
+gem 'mini_magick'
 gem 'devise'
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
