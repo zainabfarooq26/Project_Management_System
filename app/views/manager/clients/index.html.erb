@@ -1,0 +1,29 @@
+<h1>Manager Dashboard </h1>
+<p>Welcome manager, <%= current_user.email %>!</p>
+<table class="table">
+ <%= link_to 'Add', new_manager_client_path, class: 'btn btn-primary' %>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Address</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @clients.each do |client| %>
+      <tr>
+        <td><%= client.name %></td>
+        <td><%= client.email %></td>
+        <td><%= client.phone %></td>
+        <td><%= client.address %></td>
+        <td>
+          <%= link_to 'View', manager_client_path(client), class: 'btn btn-info' %>
+          <%= link_to 'Edit', edit_manager_client_path(client), class: 'btn btn-warning' %>
+          <%= link_to 'Delete', manager_client_path(client), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

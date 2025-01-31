@@ -7,4 +7,5 @@ class User < ApplicationRecord
   def locked?
     !self.active? # Returns true if user is inactive (locked)
   end    
+    has_many :clients, dependent: :destroy  # A manager can have many clients 
 end

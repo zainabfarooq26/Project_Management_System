@@ -34,11 +34,14 @@ class Admin::UsersController < ApplicationController
         end
       end
       
-    def destroy
+      def destroy
       @user = User.find(params[:id])
       @user.destroy
-      redirect_to admin_users_path, notice: 'User deleted successfully.'
-    end
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.remove("user_#{@user.id}") }
+        format.html { redirect_to admin_users_path, notice: 'User deleted successfully.' }
+       end
+      end
   
     def toggle_status
         @user = User.find(params[:id])

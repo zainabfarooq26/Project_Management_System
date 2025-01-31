@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     if resource.admin?
       admin_dashboard_path # Redirect to admin dashboard
     elsif resource.is_manager? 
-      manager_dashboard_index_path  # Redirect manager to manager dashboard
+      manager_clients_path  # Redirect manager to manager dashboard
     else
       root_path  # Redirect normal users to homepage
     end
