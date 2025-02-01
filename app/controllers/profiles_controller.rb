@@ -1,11 +1,9 @@
 
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
-
   def edit
     @profile = current_user.profile
   end
-
   def update
     @profile = current_user.profile
 
@@ -18,7 +16,6 @@ class ProfilesController < ApplicationController
       render :edit
     end
   end
-
   private
   def profile_params
     # Ensure profile_photo is permitted
