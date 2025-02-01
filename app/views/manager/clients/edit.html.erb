@@ -1,5 +1,4 @@
 <h1><%= @client.new_record? ? 'New Client' : 'Edit Client' %></h1>
-
 <%= form_with model: @client, url: @client.new_record? ? manager_clients_path : manager_client_path(@client), local: true do |form| %>
   <div class="mb-3">
     <%= form.label :name %>
