@@ -15,10 +15,12 @@ class User < ApplicationRecord
     !self.active? # Returns true if user is inactive (locked)
   end  
   private
+
   def create_profile
-    self.create_profile!(
-      first_name: '',
-      last_name: ''
-    ) # Creates a profile without the `name` column
+    # Ensure profile is created with default values if none exist
+    build_profile(first_name: "Default", last_name: "User") unless self.profile
+    self.profile.save! # Save the profile after assigning values
+    rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Profile creation failed: #{e.message}"
   end
 end
