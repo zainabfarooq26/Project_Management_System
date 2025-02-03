@@ -23,5 +23,7 @@ Rails.application.routes.draw do
  namespace :manager do
      resources :dashboard, only: [:index] # Ensure this exists
      resources :clients  # CRUD for managers to manage clients
+     resources :projects  # CRUD for managers to manage projects
+
  end
 end

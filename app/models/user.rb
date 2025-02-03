@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_one_attached :profile_photo
   has_one :profile, dependent: :destroy
   has_many :clients, dependent: :destroy 
+  has_many :projects, foreign_key: :manager_id, dependent: :destroy
   def manager?
     is_manager == true
   end
@@ -15,7 +16,6 @@ class User < ApplicationRecord
     !self.active? # Returns true if user is inactive (locked)
   end  
   private
-
   def create_profile
     # Ensure profile is created with default values if none exist
     build_profile(first_name: "Default", last_name: "User") unless self.profile
