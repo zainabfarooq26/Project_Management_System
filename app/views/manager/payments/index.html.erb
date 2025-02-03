@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Payments Dashboard</a>
+    <div class="d-flex align-items-center">
+      <!-- Profile Button (Triggers Modal) -->
+      <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
+        Profile
+      </button>
+      <!-- Sign-Out Button -->
+      <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light me-3' %>
+    </div>
+  </div>
+</nav>
+<!-- Include the Profile Modal -->
+<%= render 'shared/profile_modal' %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Payments for  <%= @project.title %></h1>
+  <%= link_to "New Payment", new_manager_project_payment_path(@project), class: "btn btn-outline-dark me-5" %>
+</div>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Paid On</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payments.each do |payment| %>
+      <tr>
+        <td><%= number_to_currency(payment.amount) %></td>
+            <td>
+            <% if payment.status == 'pending' %>
+                <span class="badge bg-warning">Pending</span>
+            <% elsif payment.status == 'scheduled' %>
+                <span class="badge bg-primary">Scheduled</span>
+            <% elsif payment.status == 'paid' %>
+                <span class="badge bg-success">Paid</span>
+            <% else %>
+                <span class="badge bg-secondary">Unknown</span>
+            <% end %>
+            </td>
+        <td><%= payment.paid_on.present? ? payment.paid_on.strftime("%Y-%m-%d") : "N/A" %></td>
+        <td>
+          <%= link_to 'Edit', edit_manager_project_payment_path(@project, payment), class: 'btn btn-warning' %>
+          <%= link_to 'Delete', manager_project_payment_path(@project, payment), class: 'btn btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

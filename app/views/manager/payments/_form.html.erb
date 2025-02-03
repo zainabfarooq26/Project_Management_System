@@ -1,0 +1,22 @@
+<h1><%= @payment.new_record? ? "New Payment" : "Edit Payment" %> for <%= @project.title %></h1>
+
+<%= form_with(model: [@project, @payment], local: true) do |f| %>
+  <div class="mb-3">
+    <%= f.label :amount %>
+    <%= f.number_field :amount, step: 0.01, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :paid_on %>
+    <%= f.date_field :paid_on, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :status %>
+    <%= f.select :status, [['Paid', 'Paid'], ['Pending', 'Pending'], ['Scheduled', 'Scheduled']], {}, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.submit "Save Payment", class: 'btn btn-primary' %>
+  </div>
+<% end %>
