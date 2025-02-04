@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
   has_many :clients, dependent: :destroy 
   has_many :projects, foreign_key: :manager_id, dependent: :destroy
+  has_many :time_logs, dependent: :destroy
+  has_many :comments, dependent: :destroy
   def manager?
     is_manager == true
   end
