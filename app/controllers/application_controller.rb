@@ -2,9 +2,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :check_user_status, if: :user_signed_in?
-  
   # Skip confirmation for admin users (skip only on admin actions)
-  
 
   def check_user_status
     if current_user.active == false
@@ -28,4 +26,5 @@ class ApplicationController < ActionController::Base
   def admin_signed_in?
     current_user&.admin?
   end
+  
 end
