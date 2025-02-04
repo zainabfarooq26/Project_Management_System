@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Manager Dashboard</a>
+    <!-- Navbar Title Based on User Role -->
+    <a class="navbar-brand" href="#">
+      <%= current_user.is_manager? ? "Manager Dashboard" : "Clients Listing" %> <!-- Show appropriate title -->
+    </a>
     <div class="d-flex align-items-center">
       <!-- Profile Button (Triggers Modal) -->
       <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
@@ -11,13 +14,19 @@
     </div>
   </div>
 </nav>
+
 <!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1> Clients Listing</h1>
-  <%= link_to "New Client", new_manager_client_path, class: "btn btn-outline-dark me-5" %>
+  <!-- Conditional Link to New Client or Client Listing -->
+  <% if current_user.is_manager? %>  <!-- Show New Client link for Managers only -->
+    <%= link_to "New Client", new_manager_client_path, class: "btn btn-outline-dark me-5" %>
+  <% end %>
 </div>
-<p>Welcome manager, <%= current_user.email %>!</p>
+
+<p>Welcome <%= current_user.is_manager? ? "manager" : "user" %>, <%= current_user.email %>!</p>
+
 <table class="table">
   <thead>
     <tr>
@@ -37,10 +46,14 @@
         <td><%= client.address %></td>
         <td>
           <%= link_to 'View', manager_client_path(client), class: 'btn btn-info' %>
-          <%= link_to 'Edit', edit_manager_client_path(client), class: 'btn btn-warning' %>
-          <%= link_to 'Delete', manager_client_path(client), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-          <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>
 
+          <% if current_user.is_manager? %>  <!-- Show these options only for managers -->
+            <%= link_to 'Edit', edit_manager_client_path(client), class: 'btn btn-warning' %>
+            <%= link_to 'Delete', manager_client_path(client), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>
+          <% else %>  <!-- Show "View Projects" for users -->
+            <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>
+          <% end %>
         </td>
       </tr>
     <% end %>

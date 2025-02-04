@@ -1,0 +1,12 @@
+<%= form_with(model: [project.client, project, Comment.new], url: manager_client_project_comments_path(project.client, project), local: true) do |form| %>
+
+    <div class="mb-3">
+      <%= form.label :content, "Add a Comment", class: "form-label" %>
+      <%= form.text_area :content, class: "form-control", rows: 3, placeholder: "Write your comment here..." %>
+    </div>
+  
+    <div class="mb-3">
+      <%= form.submit "Post Comment", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  

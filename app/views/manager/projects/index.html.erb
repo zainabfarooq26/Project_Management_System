@@ -11,12 +11,18 @@
     </div>
   </div>
 </nav>
+
 <!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Projects Listing</h2>
-  <%= link_to "New Project", new_manager_client_project_path(@client), class: "btn btn-outline-dark me-5" %>
+  
+  <% if current_user.is_manager? %>  <!-- Show New Project link for Managers only -->
+    <%= link_to "New Project", new_manager_client_project_path(@client), class: "btn btn-outline-dark me-5" %>
+  <% end %>
 </div>
+
 <table class="table">
   <thead>
     <tr>
@@ -45,19 +51,21 @@
               No attachments
             <% end %>
           </td>
-          <% @projects.each do |project| %>
-            <% if project.id.present? %> 
+          
           <td>
-      <%= link_to "Show", manager_client_project_path(project.client, project), class: "btn btn-info" %>
-      <%= link_to "Edit", edit_manager_client_project_path(project.client, project), class: "btn btn-warning" %>
-      <%= link_to "Delete", manager_client_project_path(project.client, project), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-     <%= link_to "View Payments", manager_client_project_payments_path(project.client, project), class: "btn btn-primary" %>
- <!-- View Payments button -->
-</td>
-<% else %>
-    <td class="text-danger">Invalid Project</td>
-  <% end %>
-<% end %>
+            <%= link_to "Show", manager_client_project_path(project.client, project), class: "btn btn-success" %>
+
+            <% if current_user.is_manager? %> <!-- Only show edit, delete, and payments for managers -->
+              <%= link_to "Edit", edit_manager_client_project_path(project.client, project), class: "btn btn-warning" %>
+              <%= link_to "Delete", manager_client_project_path(project.client, project), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
+              <%= link_to "View Payments", manager_client_project_payments_path(project.client, project), class: "btn btn-primary" %>
+            <% else %> <!-- Actions for users: add comments and time logs -->
+         
+            <%= link_to "Add Comment", manager_client_project_new_comment_path(project.client, project), class: "btn btn-info" %>
+            <%= link_to "Add Time Log", manager_client_project_time_logs_path(project.client, project), class: "btn btn-primary" %>
+
+            <% end %>
+          </td>
         </tr>
       <% end %>
     <% else %>

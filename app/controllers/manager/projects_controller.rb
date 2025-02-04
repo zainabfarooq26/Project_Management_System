@@ -1,35 +1,45 @@
 class Manager::ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_manager
   before_action :set_client
   before_action :set_project, only: %i[show edit update destroy]
+  before_action :authorize_manager, only: %i[new create edit update destroy] # Managers only for these actions
 
   def index
     @client = Client.find(params[:client_id]) # Ensure @client is assigned
-    @projects = @client.projects # Fetch all projects for the client
+    if current_user.is_manager?
+      # Managers can see all projects under the client
+      @projects = @client.projects
+    else
+      # Users only see projects under the client (view-only)
+      @projects = @client.projects
+    end
+    @project = @projects.first
   end
-  
 
   def new
     @project = @client.projects.build
   end
 
   def create
-   @client = Client.find(params[:client_id])
-   @project = @client.projects.build(project_params)
-   @project.manager = current_user
-  if @project.save
-    redirect_to manager_client_projects_path(@client), notice: "Project created successfully."
-  else
-    Rails.logger.debug "Project Errors: #{@project.errors.full_messages}" 
-    render :new
-  end
+    @project = @client.projects.build(project_params)
+    @project.manager = current_user
+
+    if @project.save
+      redirect_to manager_client_projects_path(@client), notice: "Project created successfully."
+    else
+      Rails.logger.debug "Project Errors: #{@project.errors.full_messages}" 
+      render :new
+    end
   end
 
   def edit
+    # Only managers can edit projects
   end
 
   def show
+    # Both users and managers can view project details
+    @time_log = TimeLog.new # Allow users to create time logs
+    @comment = Comment.new # Allow users to create comments
   end
 
   def update
