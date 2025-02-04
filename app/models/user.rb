@@ -3,7 +3,6 @@ class User < ApplicationRecord
   # Include default devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
   validates :active, inclusion: { in: [true, false] }
   has_one_attached :profile_photo
   has_one :profile, dependent: :destroy

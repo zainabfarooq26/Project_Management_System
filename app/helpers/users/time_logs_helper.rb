@@ -1,0 +1,2 @@
+module Users::TimeLogsHelper
+end
