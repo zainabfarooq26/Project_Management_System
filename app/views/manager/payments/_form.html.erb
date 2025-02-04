@@ -1,6 +1,4 @@
-<h1><%= @payment.new_record? ? "New Payment" : "Edit Payment" %> for <%= @project.title %></h1>
-
-<%= form_with(model: [@project, @payment], local: true) do |f| %>
+<%= form_with(model: [@project, @payment], url: manager_client_project_payments_path(@client, @project), local: true) do |f| %>
   <div class="mb-3">
     <%= f.label :amount %>
     <%= f.number_field :amount, step: 0.01, class: 'form-control' %>

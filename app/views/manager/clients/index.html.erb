@@ -39,6 +39,8 @@
           <%= link_to 'View', manager_client_path(client), class: 'btn btn-info' %>
           <%= link_to 'Edit', edit_manager_client_path(client), class: 'btn btn-warning' %>
           <%= link_to 'Delete', manager_client_path(client), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>
+
         </td>
       </tr>
     <% end %>

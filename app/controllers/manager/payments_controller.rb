@@ -5,37 +5,39 @@ class Manager::PaymentsController < ApplicationController
     before_action :set_payment, only: %i[edit update destroy]
   
     def index
+      @client = Client.find(params[:client_id])
+      @project = @client.projects.find(params[:project_id])
       @payments = @project.payments
     end
   
 
     def new
-      @project = current_user.projects.find(params[:project_id])
+      @client = Client.find(params[:client_id])  # Ensure the client is found using client_id from params
+      @project = @client.projects.find(params[:project_id])  # Find the project using project_id
       @payment = @project.payments.build
     end
           
 
     def create
+      @client = Client.find(params[:client_id])
+      @project = @client.projects.find(params[:project_id])
       @payment = @project.payments.build(payment_params)
       if @payment.save
-        if @payment.paid_on > Date.today
-            flash[:notice] = "Payment is scheduled for #{l(@payment.paid_on, format: :long)}"
-        else
-        flash[:success] = "Payment added successfully!"
-        end
-        redirect_to manager_project_payments_path(@project)
+        redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment created successfully!'
       else
-        flash[:error] = "Error adding payment!"
         render :new
       end
     end
   
-    def edit; end
+    def edit
+      @client = @project.client
+    end
   
     def update
+      @client = @project.client  # Ensure @client is set based on the project
       if @payment.update(payment_params)
         flash[:success] = "Payment updated successfully!"
-        redirect_to manager_project_payments_path(@project)
+        redirect_to manager_client_project_payments_path(@client, @project)
       else
         flash[:error] = "Error updating payment!"
         render :edit

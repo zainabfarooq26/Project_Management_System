@@ -1,6 +1,7 @@
 <h1>Edit Payment for <%= @project.title %></h1>
 
-<%= form_with(model: [@project, @payment], url: manager_project_payment_path(@project, @payment), local: true) do |f| %>
+<%= form_with(model: [@project, @payment], url: manager_client_project_payment_path(@client, @project, @payment), local: true) do |f| %>
+
   <div class="mb-3">
     <%= f.label :amount %>
     <%= f.number_field :amount, step: 0.01, value: @payment.amount, class: 'form-control' %>

@@ -14,8 +14,8 @@
 <!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Payments for  <%= @project.title %></h1>
-  <%= link_to "New Payment", new_manager_project_payment_path(@project), class: "btn btn-outline-dark me-5" %>
+  <h1>Payments for <%= @project.title %></h1>
+  <%= link_to "New Payment", new_manager_client_project_payment_path(@client, @project), class: "btn btn-outline-dark me-5" %>
 </div>
 
 
@@ -45,8 +45,9 @@
             </td>
         <td><%= payment.paid_on.present? ? payment.paid_on.strftime("%Y-%m-%d") : "N/A" %></td>
         <td>
-          <%= link_to 'Edit', edit_manager_project_payment_path(@project, payment), class: 'btn btn-warning' %>
-          <%= link_to 'Delete', manager_project_payment_path(@project, payment), class: 'btn btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        <%= link_to 'Edit', edit_manager_client_project_payment_path(@client, @project, payment), class: 'btn btn-warning' %>
+        <%= link_to 'Delete', manager_client_project_payment_path(@client, @project, payment), class: 'btn btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        
         </td>
       </tr>
     <% end %>

@@ -1,4 +1,8 @@
-<%= form_with(model: project, url: project.new_record? ? manager_projects_path : manager_project_path(project), local: true, html: { multipart: true }) do |form| %>
+<%= form_with(model: project, 
+              url: project.new_record? ? manager_client_projects_path(@client) : manager_client_project_path(@client, project), 
+              local: true, 
+              html: { multipart: true }) do |form| %>
+
   <% if project.errors.any? %>
     <div class="alert alert-danger">
       <h4><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h4>
@@ -27,18 +31,19 @@
     <small class="form-text text-muted">You can select multiple files.</small>
   </div>
 
-  <% if project.attachments.attached? %>
-    <div class="mb-3">
-      <h5>Uploaded Files:</h5>
-      <ul class="list-group">
-        <% project.attachments.each do |attachment| %>
-          <li class="list-group-item">
-            <%= link_to attachment.filename, rails_blob_path(attachment, disposition: "attachment"), class: "btn btn-link" %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <% if project.persisted? && project.attachments.attached? %>
+  <div class="mb-3">
+    <h5>Uploaded Files:</h5>
+    <ul class="list-group">
+      <% project.attachments.each do |attachment| %>
+        <li class="list-group-item">
+          <%= link_to attachment.filename, rails_blob_path(attachment, disposition: "attachment"), class: "btn btn-link" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 
   <div class="mb-3">
     <%= form.submit "Save Project", class: "btn btn-primary w-100" %>

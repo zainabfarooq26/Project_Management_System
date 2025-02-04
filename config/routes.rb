@@ -20,11 +20,12 @@ Rails.application.routes.draw do
          end
        end
   end
- namespace :manager do
-     resources :dashboard, only: [:index] # Ensure this exists
-     resources :clients  # CRUD for managers to manage clients
-     resources :projects do # CRUD for managers to manage projects
-        resources :payments,only: [:index, :new, :create, :edit, :update, :destroy]
-     end
- end
+  namespace :manager do
+    resources :dashboard, only: [:index] # Dashboard route for the manager
+    resources :clients do  # CRUD for managers to manage clients
+      resources :projects do # CRUD for managers to manage projects
+        resources :payments, only: [:index, :new, :create, :edit, :update, :destroy]
+      end
+    end
+  end
 end
