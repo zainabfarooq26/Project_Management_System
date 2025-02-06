@@ -81,7 +81,14 @@
               <ul id="timelogs-list-<%= project.id %>" class="list-group list-group-flush">
                 <% project.time_logs.limit(5).each do |time_log| %>
                   <li class="list-group-item">
-                    <strong><%= time_log.user.name %>:</strong> <%= time_log.hours %> hours logged
+                      <strong><%= "#{time_log.user.profile.first_name} #{time_log.user.profile.last_name}".strip.presence || "Unknown User" %>:</strong>  <%= time_log.hours %> hours logged
+          
+                  <% if time_log.user == current_user %>  <!-- Only show edit/delete for the comment's author -->
+                    <div class="float-end">
+                      <%= link_to 'Edit', edit_manager_client_project_time_log_path(project.client, project, time_log), class: "btn btn-warning btn-sm" %>
+                      <%= link_to 'Delete', manager_client_project_time_log_path(project.client, project, time_log),  data: { turbo_method: :delete,turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+                    </div>
+                  <% end %>
                   </li>
                 <% end %>
               </ul>
@@ -100,7 +107,8 @@
               <%= link_to "View Payments", manager_client_project_payments_path(project.client, project), class: "btn btn-primary" %>
             <% else %> 
               <%= link_to "Add Comment", manager_client_project_new_comment_path(project.client, project), class: "btn btn-info" %>
-              <%= link_to "Add Time Log", manager_client_project_time_logs_path(project.client, project), class: "btn btn-primary" %>
+            <%= link_to "Add Time Log", new_manager_client_project_time_log_path(project.client, project), class: "btn btn-primary" %>
+
             <% end %>
           </td>
         </tr>

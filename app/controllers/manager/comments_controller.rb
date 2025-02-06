@@ -8,13 +8,17 @@ class Manager::CommentsController < ApplicationController
 
   def create
     @comment = @project.comments.new(comment_params)
-    @comment.user = current_user  # Associate the comment with the current user
-    if @comment.save
-      redirect_to manager_client_project_path(@client, @project)
-    else
-      render :new
+  @comment.user = current_user  # Associate the comment with the current user
+
+  if @comment.save
+    respond_to do |format|
+      format.html { redirect_to manager_client_projects_path(@client, @project) }
+      format.js   # This will look for create.js.erb to render
     end
+  else
+    render :new
   end
+end
 
   def edit
     # @comment is set via before_action
@@ -22,7 +26,10 @@ class Manager::CommentsController < ApplicationController
 
   def update
     if @comment.update(comment_params)
-      redirect_to manager_client_project_path(@client, @project)
+      respond_to do |format|
+        format.html { redirect_to manager_client_projects_path(@client, @project) }
+        format.js   # This will look for update.js.erb to render
+      end
     else
       render :edit
     end
@@ -30,7 +37,7 @@ class Manager::CommentsController < ApplicationController
 
   def destroy
     @comment.destroy
-    redirect_to manager_client_project_path(@client, @project)
+    redirect_to manager_client_projects_path(@client, @project)
   end
 
   private

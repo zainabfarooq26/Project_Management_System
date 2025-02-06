@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     resources :clients do  # CRUD for managers to manage clients
       resources :projects do # CRUD for managers to manage projects
         resources :payments, only: [:index, :new, :create, :edit, :update, :destroy]
-        resources :time_logs, only: [:index, :create, :destroy]  # Add index and create!
+        resources :time_logs, only: [:create, :new, :edit, :update, :destroy]  
         resources :comments, only: [:create, :new, :edit, :update, :destroy]  
           get 'comments/new', to: 'comments#new', as: 'new_comment'
 

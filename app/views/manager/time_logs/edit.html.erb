@@ -1,0 +1,15 @@
+<%= form_with(model: @time_log, url: manager_client_project_time_log_path(@client, @project, @time_log), method: :patch, local: true) do |form| %>
+    <div class="card shadow-sm p-4 mb-4">
+      <h4 class="card-title mb-4 text-center">Update Time Log</h4>
+  
+      <div class="mb-3">
+        <%= form.label :hours, "Log Hours", class: "form-label" %>
+        <%= form.number_field :hours, value: @time_log.hours, class: "form-control", min: 0, step: 0.5, placeholder: "Enter hours worked", required: true %>
+      </div>
+  
+      <div class="text-center">
+        <%= form.submit "Update", class: "btn btn-success w-50" %>
+      </div>
+    </div>
+  <% end %>
+  
