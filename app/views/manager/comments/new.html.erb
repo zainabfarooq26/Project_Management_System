@@ -1,0 +1,57 @@
+<%= form_with(url: manager_client_project_comments_path(@client, @project), model: @comment, remote: true, html: { id: "new_comment_form", class: "needs-validation" }, data: { turbo: false }) do |form| %>
+  <div class="card shadow-sm border-0 rounded p-3">
+    <h5 class="card-title text-primary">Add a Comment</h5>
+
+    <!-- Display validation errors -->
+    <% if @comment.errors.any? %>
+      <div class="alert alert-danger" role="alert">
+        <strong><%= pluralize(@comment.errors.count, "error") %> prevented submission:</strong>
+        <ul>
+          <% @comment.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-floating mb-3">
+      <%= form.text_area :content, class: "form-control", placeholder: "Write your comment here...", rows: 3, required: true %>
+      <%= form.label :content, "Your Comment" %>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary" id="comment-submit-btn">
+        <span class="spinner-border spinner-border-sm d-none" id="loading-spinner"></span>
+        Add Comment
+      </button>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("new_comment_form");
+    const submitBtn = document.getElementById("comment-submit-btn");
+    const spinner = document.getElementById("loading-spinner");
+
+    if (form) {
+      form.addEventListener("ajax:beforeSend", function() {
+        submitBtn.disabled = true;
+        spinner.classList.remove("d-none"); // Show loading spinner
+      });
+
+      form.addEventListener("ajax:success", function(event) {
+        let [data, status, xhr] = event.detail;
+        document.getElementById("new_comment_form").reset(); // Clear form
+        submitBtn.disabled = false;
+        spinner.classList.add("d-none"); // Hide spinner
+      });
+
+      form.addEventListener("ajax:error", function() {
+        submitBtn.disabled = false;
+        spinner.classList.add("d-none"); // Hide spinner
+        alert("Failed to add comment. Please try again.");
+      });
+    }
+  });
+</script>

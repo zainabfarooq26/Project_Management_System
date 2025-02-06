@@ -29,6 +29,10 @@
       <th>Title</th>
       <th>Description</th>
       <th>Attachments</th>
+      <% unless current_user.is_manager? %> <!-- Only for users -->
+        <th>Comments</th>
+        <th>Time Logs</th>
+      <% end %>
       <th>Actions</th>
     </tr>
   </thead>
@@ -51,26 +55,59 @@
               No attachments
             <% end %>
           </td>
-          
+
+          <% unless current_user.is_manager? %> <!-- Only show for users -->
+            <td>
+              <ul id="comments-list-<%= project.id %>" class="list-group list-group-flush">
+                <% project.comments.limit(5).each do |comment| %>  
+                  <li class="list-group-item">
+                  <strong><%= "#{comment.user.profile.first_name} #{comment.user.profile.last_name}".strip.presence || "Unknown User" %>:</strong> 
+                  <%= comment.content %>
+                  <% if comment.user == current_user %>  <!-- Only show edit/delete for the comment's author -->
+                    <div class="float-end">
+                      <%= link_to 'Edit', edit_manager_client_project_comment_path(project.client, project, comment), class: "btn btn-warning btn-sm" %>
+                      <%= link_to 'Delete', manager_client_project_comment_path(project.client, project, comment),  data: { turbo_method: :delete,turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+                    </div>
+                  <% end %>
+                  </li>
+                <% end %>
+              </ul>
+              <% if project.comments.empty? %>
+                <span class="text-muted">No comments yet</span>
+              <% end %>
+            </td>
+
+            <td>
+              <ul id="timelogs-list-<%= project.id %>" class="list-group list-group-flush">
+                <% project.time_logs.limit(5).each do |time_log| %>
+                  <li class="list-group-item">
+                    <strong><%= time_log.user.name %>:</strong> <%= time_log.hours %> hours logged
+                  </li>
+                <% end %>
+              </ul>
+              <% if project.time_logs.empty? %>
+                <span class="text-muted">No time logs yet</span>
+              <% end %>
+            </td>
+          <% end %>
+
           <td>
             <%= link_to "Show", manager_client_project_path(project.client, project), class: "btn btn-success" %>
 
-            <% if current_user.is_manager? %> <!-- Only show edit, delete, and payments for managers -->
+            <% if current_user.is_manager? %> 
               <%= link_to "Edit", edit_manager_client_project_path(project.client, project), class: "btn btn-warning" %>
               <%= link_to "Delete", manager_client_project_path(project.client, project), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
               <%= link_to "View Payments", manager_client_project_payments_path(project.client, project), class: "btn btn-primary" %>
-            <% else %> <!-- Actions for users: add comments and time logs -->
-         
-            <%= link_to "Add Comment", manager_client_project_new_comment_path(project.client, project), class: "btn btn-info" %>
-            <%= link_to "Add Time Log", manager_client_project_time_logs_path(project.client, project), class: "btn btn-primary" %>
-
+            <% else %> 
+              <%= link_to "Add Comment", manager_client_project_new_comment_path(project.client, project), class: "btn btn-info" %>
+              <%= link_to "Add Time Log", manager_client_project_time_logs_path(project.client, project), class: "btn btn-primary" %>
             <% end %>
           </td>
         </tr>
       <% end %>
     <% else %>
       <tr>
-        <td colspan="4">No projects available</td>
+        <td colspan="6">No projects available</td>
       </tr>
     <% end %>
   </tbody>

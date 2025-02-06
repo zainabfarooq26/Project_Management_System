@@ -1,0 +1,11 @@
+<h2>Edit Comment</h2>
+
+<%= form_with(model: [@client, @project, @comment], url: manager_client_project_comment_path(@client, @project, @comment), method: :patch) do |form| %>
+  <div class="form-group">
+    <%= form.label :content, "Your Comment" %>
+    <%= form.text_area :content, class: "form-control", rows: 3 %>
+  </div>
+  <%= form.submit "Update Comment", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'Cancel', manager_client_project_path(@client, @project), class: "btn btn-secondary" %>
