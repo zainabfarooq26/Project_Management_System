@@ -2,25 +2,7 @@
   <nav class="navbar navbar-expand-lg bg-light shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="/">
-        <h3 class="text-dark">Your Logo</h3>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Member</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Courses</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Blog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Event</a>
-          </li>
+       
         </ul>
         <form class="d-flex">
           <% if user_signed_in? %>
@@ -101,3 +83,89 @@
 
 <!-- Include Bootstrap's JS for Modal Functionality -->
 <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-k6RqeWeci5ZR/Lv4MR0sA6A57eegAwrjANPrc6wF/qFV7bE0JH07hPH2oTQZ7OYt", crossorigin: "anonymous" %>
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Top 5 Projects -->
+    <div class="col-md-6">
+      <h4>Top 5 Projects</h4>
+      <table class="table table-bordered">
+        <thead class="table-success">
+          <tr>
+            <th>Project</th>
+            <th>Hours Clocked</th>
+            <th>Earnings</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @top_projects.each do |project| %>
+            <tr>
+              <td><%= project.title %></td>
+              <td><%= project.time_logs.sum(:hours) %></td>
+              <td>$<%= project.total_earnings %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bottom 5 Projects -->
+    <div class="col-md-6">
+      <h4>Bottom 5 Projects</h4>
+      <table class="table table-bordered">
+        <thead class="table-danger">
+          <tr>
+            <th>Project</th>
+            <th>Hours Clocked</th>
+            <th>Earnings</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bottom_projects.each do |project| %>
+            <tr>
+              <td><%= project.title %></td>
+              <td><%= project.time_logs.sum(:hours) %></td>
+              <td>$<%= project.total_earnings %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Earnings and Hours Chart -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h4>Monthly Earnings & Hours Logged</h4>
+      <canvas id="earningsChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('earningsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: <%= @monthly_earnings.keys.map { |date| date.strftime("%b %Y") }.to_json.html_safe %>,
+        datasets: [
+          {
+            label: 'Earnings ($)',
+            data: <%= @monthly_earnings.values.to_json.html_safe %>,
+            borderColor: 'blue',
+            fill: false
+          },
+          {
+            label: 'Hours Logged',
+            data: <%= @monthly_hours.values.to_json.html_safe %>,
+            borderColor: 'green',
+            fill: false
+          }
+        ]
+      }
+    });
+  });
+</script>
+

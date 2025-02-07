@@ -1,0 +1,25 @@
+<div class="card shadow-sm p-4">
+  <h2 class="mb-4 text-primary">Assign Users to <%= @project.title %></h2>
+
+  <%= form_with model: @project, url: assign_users_manager_client_project_path(@project.client, @project), method: :post, class: "needs-validation" do |form| %>
+    
+    <div class="mb-3">
+      <%= form.label :user_ids, "Select Users to Assign", class: "form-label fw-bold" %>
+      
+      <div class="border p-3 rounded bg-light">
+        <%= form.collection_check_boxes :user_ids, @users, :id, lambda { |user| "#{user.first_name} #{user.last_name} (#{user.email})" } do |cb| %>
+          <div class="form-check">
+            <%= cb.check_box class: "form-check-input" %>
+            <%= cb.label class: "form-check-label" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <%= form.submit "Assign Users", class: "btn btn-primary px-4" %>
+      <%= link_to 'Back to Projects', manager_client_projects_path(@project.client), class: "btn btn-secondary px-4" %>
+    </div>
+
+  <% end %>
+</div>

@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
   def admin_signed_in?
     current_user&.admin?
   end

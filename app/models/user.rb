@@ -6,8 +6,8 @@ class User < ApplicationRecord
   validates :active, inclusion: { in: [true, false] }
   has_one_attached :profile_photo
   has_one :profile, dependent: :destroy
-  has_many :clients, dependent: :destroy 
-  has_many :projects, foreign_key: :manager_id, dependent: :destroy
+  has_many :clients
+  has_and_belongs_to_many :projects, dependent: :destroy
   has_many :time_logs, dependent: :destroy
   has_many :comments, dependent: :destroy
   def manager?
@@ -24,4 +24,6 @@ class User < ApplicationRecord
     rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error "Profile creation failed: #{e.message}"
   end
-end
+  
+  end
+

@@ -2,15 +2,38 @@ class Manager::ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_client
   before_action :set_project, only: %i[show edit update destroy]
-  before_action :authorize_manager, only: %i[new create edit update destroy] # Managers only for these actions
+  before_action :authorize_manager, only: %i[new create edit update destroy] 
 
+      def assign_users
+        @project = Project.find(params[:id]) # Ensure we are getting the correct project
+        @users = User.where.not(admin: true) # Exclude admins
+        if request.post?
+          Rails.logger.debug "Params received: #{params.inspect}"  # Debugging line
+      
+          user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
+          Rails.logger.debug "User IDs to assign: #{user_ids}"
+      
+          if user_ids.any?
+            @project.user_ids = user_ids # Assign users to project
+            if @project.save
+              flash[:notice] = "Users assigned successfully!"
+            else
+              flash[:alert] = "Failed to assign users."
+            end
+          else
+            flash[:alert] = "No users selected."
+          end
+      
+          redirect_to manager_client_projects_path(@project.client)
+        end
+      end
+  
+  
   def index
-    @client = Client.find(params[:client_id]) # Ensure @client is assigned
+    @client = Client.find(params[:client_id])
     if current_user.is_manager?
-      # Managers can see all projects under the client
       @projects = @client.projects
     else
-      # Users only see projects under the client (view-only)
       @projects = @client.projects
     end
     @project = @projects.first

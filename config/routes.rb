@@ -27,6 +27,10 @@ Rails.application.routes.draw do
     resources :dashboard, only: [:index] # Dashboard route for the manager
     resources :clients do  # CRUD for managers to manage clients
       resources :projects do # CRUD for managers to manage projects
+        member do
+          get 'assign_users'
+          post 'assign_users', to: 'projects#assign_users'
+        end
         resources :payments, only: [:index, :new, :create, :edit, :update, :destroy]
         resources :time_logs, only: [:create, :new, :edit, :update, :destroy]  
         resources :comments, only: [:create, :new, :edit, :update, :destroy]  
