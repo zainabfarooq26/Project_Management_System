@@ -1,71 +1,89 @@
 class Manager::PaymentsController < ApplicationController
-    before_action :authenticate_user!
-    before_action :authorize_manager
-    before_action :set_project
-    before_action :set_payment, only: %i[edit update destroy]
-  
-    def index
-      @client = Client.find(params[:client_id])
-      @project = @client.projects.find(params[:project_id])
-      @payments = @project.payments
-    end
-  
+  before_action :authenticate_user!
+  before_action :authorize_manager
+  before_action :set_project
+  before_action :set_client
+  before_action :set_payment, only: %i[edit update destroy]
 
-    def new
-      @client = Client.find(params[:client_id])  # Ensure the client is found using client_id from params
-      @project = @client.projects.find(params[:project_id])  # Find the project using project_id
-      @payment = @project.payments.build
-    end
-          
+  def index
+    @payments = @project.payments
+  end
 
-    def create
-      @client = Client.find(params[:client_id])
-      @project = @client.projects.find(params[:project_id])
-      @payment = @project.payments.build(payment_params)
-      if @payment.save
-        redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment created successfully!'
-      else
-        render :new
-      end
-    end
-  
-    def edit
-      @client = @project.client
-    end
-  
-    def update
-      @client = @project.client  # Ensure @client is set based on the project
-      if @payment.update(payment_params)
-        flash[:success] = "Payment updated successfully!"
-        redirect_to manager_client_project_payments_path(@client, @project)
-      else
-        flash[:error] = "Error updating payment!"
-        render :edit
-      end
-    end
-  
-    def destroy
-      @payment.destroy
-      flash[:success] = "Payment deleted successfully!"
-      redirect_to manager_project_payments_path(@project)
-    end
-  
-    private
-  
-    def set_project
-      @project = current_user.projects.find(params[:project_id])  # Only the manager's projects
-    end
-  
-    def set_payment
-      @payment = @project.payments.find(params[:id])  # Find the specific payment for the project
-    end
-  
-    def payment_params
-      params.require(:payment).permit(:amount, :paid_on,:status)
-    end
-  
-    def authorize_manager
-      redirect_to root_path, alert: "Unauthorized" unless current_user.is_manager?
+  def new
+    @payment = @project.payments.build
+  end
+
+  def create
+    @payment = @project.payments.build(payment_params)
+
+    if @payment.save
+      redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment created successfully!'
+    else
+      flash.now[:alert] = "Error creating payment!"
+      render :new
     end
   end
-  
+
+  def edit; end
+
+  def update
+    if @payment.update(payment_params)
+      redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment updated successfully!'
+    else
+      flash.now[:alert] = "Error updating payment!"
+      render :edit
+    end
+  end
+
+  def destroy
+    if @payment.destroy
+      redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment deleted successfully!'
+    else
+      redirect_to manager_client_project_payments_path(@client, @project), alert: 'Error deleting payment!'
+    end
+  end
+
+  private
+
+  def set_project
+    puts "Project ID from params: #{params[:project_id]}" # Debugging
+  @project = Project.find_by(id: params[:project_id])
+
+  if @project.nil?
+    flash[:alert] = "⚠️ Project not found!"
+    redirect_to manager_assigned_projects_path and return
+  end
+
+  # Allow managers to access all projects, but limit non-managers to assigned projects
+  if !current_user.is_manager? && !current_user.projects.exists?(@project.id)
+    flash[:alert] = "⚠️ You are not assigned to this project!"
+    redirect_to manager_client_projects_path and return
+  end
+  end
+
+  def set_client
+    if @project.present?
+      @client = @project.client
+    else
+      flash[:alert] = "⚠️ Project not found!"
+      redirect_to manager_client_projects_path and return
+    end
+  end
+
+  def set_payment
+    @payment = @project.payments.find_by(id: params[:id])
+
+    if @payment.nil?
+      flash[:alert] = "⚠️ Payment not found!"
+      redirect_to manager_client_project_payments_path(@client, @project) and return
+    end
+  end
+
+  def payment_params
+    params.require(:payment).permit(:amount, :paid_on, :status)
+  end
+
+  def authorize_manager
+    redirect_to root_path, alert: "Unauthorized" unless current_user.is_manager?
+  end
+end

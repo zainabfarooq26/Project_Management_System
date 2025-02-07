@@ -1,0 +1,40 @@
+<div class="container">
+  <h2 class="mb-4 text-primary">Assigned Projects</h2>
+
+  <% if @projects.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Client</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= project.title %></td>
+            <td>
+              <% if project.client.present? %>
+                <%= project.client.name %>
+              <% else %>
+                <span class="text-danger">No Client</span> <!-- Handle missing client -->
+              <% end %>
+            </td>
+            <td><%= truncate(project.description, length: 100) %></td>
+            <td>
+              <% if project.client.present? %>
+                <%= link_to "View", manager_client_project_path(project.client, project), class: "btn btn-primary btn-sm" %>
+              <% else %>
+                <span class="text-muted">No Client</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-muted">No projects assigned yet.</p>
+  <% end %>
+</div>

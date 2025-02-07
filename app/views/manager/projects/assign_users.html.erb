@@ -20,6 +20,23 @@
       <%= form.submit "Assign Users", class: "btn btn-primary px-4" %>
       <%= link_to 'Back to Projects', manager_client_projects_path(@project.client), class: "btn btn-secondary px-4" %>
     </div>
+    <hr class="my-4">
+
+  <h3 class="mb-3 text-danger">Assigned Users</h3>
+    <% if @project.users.any? %>
+    <ul class="list-group">
+      <% @project.users.each do |user| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-person-circle"></i> <%= user.first_name %> <%= user.last_name %> (<%= user.email %>)</span>
+          <%= link_to "Remove", remove_user_manager_client_project_path(@project.client, @project, user), 
+              data: {  turbo_method: :delete,  turbo_confirm: "Are you sure you want to remove this user from the project?" }, 
+              class: "btn btn-sm btn-danger" %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-muted">No users assigned yet.</p>
+  <% end %>
 
   <% end %>
 </div>

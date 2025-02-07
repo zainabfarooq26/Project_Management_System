@@ -15,6 +15,7 @@
   </div>
 </nav>
 
+
 <!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
 
@@ -53,6 +54,7 @@
             <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>
           <% else %>  <!-- Show "View Projects" for users -->
             <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>
+
           <% end %>
         </td>
       </tr>

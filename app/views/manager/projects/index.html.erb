@@ -22,7 +22,6 @@
     <%= link_to "New Project", new_manager_client_project_path(@client), class: "btn btn-outline-dark me-5" %>
   <% end %>
 </div>
-
 <table class="table">
   <thead>
     <tr>
@@ -118,14 +117,22 @@
             <% if current_user.is_manager? %> 
               <%= link_to "Edit", edit_manager_client_project_path(project.client, project), class: "btn btn-warning" %>
               <%= link_to "Delete", manager_client_project_path(project.client, project),  data: {turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
-              <%= link_to "View Payments", manager_client_project_payments_path(project.client, project), class: "btn btn-primary" %>
-              <%= link_to "Assign Users", assign_users_manager_client_project_path(project.client, project), class: "btn btn-info" %>  <!-- New button for assigning users -->
-            <% else %> 
+          
+              <% if Project.exists?(project.id) %>
+                <%= link_to "View Payments", manager_client_project_payments_path(project.client, project), class: "btn btn-primary" %>
+              <% else %>
+                <span class="text-danger">Project not found</span>
+              <% end %>
+                            <%= link_to "Assign Users", assign_users_manager_client_project_path(project.client, project), class: "btn btn-info" %>  <!-- New button for assigning users -->
+              <% elsif current_user.assigned_to?(project) %>
               <%= link_to "Add Comment", manager_client_project_new_comment_path(project.client, project), class: "btn btn-info" %>
-            <%= link_to "Add Time Log", new_manager_client_project_time_log_path(project.client, project), class: "btn btn-primary" %>
-
+              <%= link_to "Add Time Log", new_manager_client_project_time_log_path(project.client, project), class: "btn btn-primary" %>
+        
             <% end %>
-          </td>
+            
+          
+      
+             
         </tr>
       <% end %>
     <% else %>

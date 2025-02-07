@@ -1,10 +1,14 @@
-<%= form_with(model: [@client, @project, @time_log], local: true) do |form| %>
-  <div class="form-group">
-    <%= form.label :hours %>
-    <%= form.number_field :hours, class: "form-control", required: true %>
-  </div>
+<%= form_with(model: @comment, url: manager_client_project_comment_path(@client, @project, @comment), method: :patch, local: true) do |form| %>
+
 
   <div class="form-group">
-    <%= form.submit "Save Time Log", class: "btn btn-primary" %>
+    <%= form.label :content, "Comment" %>
+    <%= form.text_area :content, class: "form-control", required: true %>
   </div>
+
+  <div class="mt-3">
+    <%= form.submit "Save Comment", class: "btn btn-primary" %>
+    <%= link_to "Cancel", manager_client_project_path(@client, @project), class: "btn btn-secondary" %>
+  </div>
+
 <% end %>

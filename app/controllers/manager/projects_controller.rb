@@ -3,7 +3,18 @@ class Manager::ProjectsController < ApplicationController
   before_action :set_client
   before_action :set_project, only: %i[show edit update destroy]
   before_action :authorize_manager, only: %i[new create edit update destroy] 
-
+  def assigned
+    @projects = current_user.projects.includes(:client)
+      # Debugging output
+    if @projects.empty?
+      Rails.logger.debug "No assigned projects found for user: #{current_user.id}"
+    else
+      @projects.each do |project|
+        Rails.logger.debug "Assigned Project: #{project.title}, Client: #{project.client&.name}"
+      end
+    end
+  end
+  
       def assign_users
         @project = Project.find(params[:id]) # Ensure we are getting the correct project
         @users = User.where.not(admin: true) # Exclude admins
@@ -17,16 +28,27 @@ class Manager::ProjectsController < ApplicationController
             @project.user_ids = user_ids # Assign users to project
             if @project.save
               flash[:notice] = "Users assigned successfully!"
+             redirect_to  manager_client_projects_path(@client)
+
             else
               flash[:alert] = "Failed to assign users."
             end
           else
             flash[:alert] = "No users selected."
           end
-      
-          redirect_to manager_client_projects_path(@project.client)
         end
       end
+          def remove_user
+            @project = Project.find(params[:id])
+            user = User.find(params[:user_id])
+
+            if @project.users.delete(user)  # Remove the user from the project
+              flash[:notice] = "#{user.first_name} #{user.last_name} was removed from the project."
+            else
+              flash[:alert] = "Failed to remove user from the project."
+            end
+            redirect_to assign_users_manager_client_project_path(@project.client, @project)
+           end
   
   
   def index
