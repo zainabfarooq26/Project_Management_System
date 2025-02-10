@@ -9,6 +9,9 @@
       <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
         Profile
       </button>
+      <% if current_user.is_manager? %>  <!-- Show New Client link for Managers only -->
+    <%= link_to "New Client", new_manager_client_path, class: "btn btn-outline-light me-3" %>
+  <% end %>
       <!-- Sign-Out Button -->
       <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light me-3' %>
     </div>
@@ -18,15 +21,13 @@
 <!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <!-- Conditional Link to New Client or Client Listing -->
-  <% if current_user.is_manager? %>  <!-- Show New Client link for Managers only -->
-    <%= link_to "New Client", new_manager_client_path, class: "btn btn-outline-dark me-5" %>
-  <% end %>
-</div>
+
 
 <p>Welcome <%= current_user.is_manager? ? "manager" : "user" %>, <%= current_user.email %>!</p>
-
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2><i class="bi bi-kanban"></i> Clients Listing</h2>
+  
+</div>
 <table class="table">
   <thead>
     <tr>

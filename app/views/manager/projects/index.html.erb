@@ -6,6 +6,9 @@
       <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
         <i class="bi bi-person-circle"></i> Profile
       </button>
+      <% if current_user.is_manager? %>
+    <%= link_to "New Project", new_manager_client_project_path(@client), class: "btn btn-outline-light me-3" %>
+  <% end %>
       <% if current_user && !current_user.admin? && !current_user.is_manager? %>
         <%= link_to "Assigned Projects", assignedprojects_manager_client_projects_path(@client), class: "btn btn-outline-light me-3" %>
       <% end %>
@@ -20,9 +23,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2><i class="bi bi-kanban"></i> Projects Listing</h2>
-  <% if current_user.is_manager? %>
-    <%= link_to "New Project", new_manager_client_project_path(@client), class: "btn btn-success" %>
-  <% end %>
+  
 </div>
 
 <!-- Table Styling -->
