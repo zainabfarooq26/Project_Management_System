@@ -3,16 +3,9 @@ class Manager::ProjectsController < ApplicationController
   before_action :set_client
   before_action :set_project, only: %i[show edit update destroy]
   before_action :authorize_manager, only: %i[new create edit update destroy] 
-  def assigned
-    @projects = current_user.projects.includes(:client)
-      # Debugging output
-    if @projects.empty?
-      Rails.logger.debug "No assigned projects found for user: #{current_user.id}"
-    else
-      @projects.each do |project|
-        Rails.logger.debug "Assigned Project: #{project.title}, Client: #{project.client&.name}"
-      end
-    end
+
+  def assigned_projects
+    @projects = current_user.projects.includes(:manager) 
   end
   
       def assign_users
@@ -82,7 +75,8 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def show
-    # Both users and managers can view project details
+    @project = Project.find(params[:id])
+    @comments = @project.comments.order(created_at: :desc).limit(5)
     @time_log = TimeLog.new # Allow users to create time logs
     @comment = Comment.new # Allow users to create comments
   end
@@ -126,4 +120,5 @@ class Manager::ProjectsController < ApplicationController
   def authorize_manager
     redirect_to root_path, alert: "Unauthorized" unless current_user.is_manager?
   end
+  
 end

@@ -1,0 +1,16 @@
+<h3 class="mb-3">Assigned Projects</h3>
+
+<% if projects&.any? %>
+  <ul class="list-group">
+    <% projects.each do |project| %>
+      <li class="list-group-item d-flex justify-content-between">
+        <%= project.name %> 
+        <span class="text-muted">
+          Assigned Users: <%= project.users.map(&:name).join(", ") %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No assigned projects.</p>
+<% end %>

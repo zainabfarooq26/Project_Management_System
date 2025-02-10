@@ -2,31 +2,27 @@
   <nav class="navbar navbar-expand-lg bg-light shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="/">
-       
-        </ul>
-        <form class="d-flex">
-          <% if user_signed_in? %>
-            <!-- Profile Picture as a Button (Trigger Modal) -->
-            <div class="d-flex align-items-center">
-              <% if current_user.profile_photo.attached? %>
-                <%= link_to '#', class: "btn btn-light rounded-circle p-0 profile-btn", data: { bs_toggle: "modal", bs_target: "#profileDetailsModal" } do %>
-                  <%= image_tag(current_user.profile_photo, class: "rounded-circle", width: 40, height: 40) %>
-                <% end %>
-              <% else %>
-                <%= link_to '#', class: "btn btn-light rounded-circle p-0 profile-btn", data: { bs_toggle: "modal", bs_target: "#profileDetailsModal" } do %>
-                  <%= image_tag("default-avatar.png", class: "rounded-circle", width: 40, height: 40) %>
-                <% end %>
+        Project Management System
+      </a>
+      <form class="d-flex ms-auto">
+        <% if user_signed_in? %>
+          <div class="d-flex align-items-center">
+            <% if current_user.profile_photo.attached? %>
+              <%= link_to '#', class: "btn btn-light rounded-circle p-0", data: { bs_toggle: "modal", bs_target: "#profileDetailsModal" } do %>
+                <%= image_tag(current_user.profile_photo, class: "rounded-circle", width: 40, height: 40) %>
               <% end %>
-            </div>
-            <!-- Sign Out Button -->
-            <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-outline-warning ms-2" %>
-          <% else %>
-            <!-- Sign Up and Login Links -->
-            <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary me-2" %>
-            <%= link_to "Login", new_user_session_path, class: "btn btn-outline-success" %>
-          <% end %>
-        </form>
-      </div>
+            <% else %>
+              <%= link_to '#', class: "btn btn-light rounded-circle p-0", data: { bs_toggle: "modal", bs_target: "#profileDetailsModal" } do %>
+                <%= image_tag("default-avatar.png", class: "rounded-circle", width: 40, height: 40) %>
+              <% end %>
+            <% end %>
+          </div>
+          <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-outline-warning ms-2" %>
+        <% else %>
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary me-2" %>
+          <%= link_to "Login", new_user_session_path, class: "btn btn-outline-success" %>
+        <% end %>
+      </form>
     </div>
   </nav>
 </div>
@@ -39,57 +35,35 @@
         <h5 class="modal-title" id="profileDetailsModalLabel">Profile Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <!-- Profile Info -->
-        <div class="card shadow-sm border-light">
-              <div class="card-body text-center">
-                <% if current_user.profile.profile_photo.attached? %>
-                  <%= image_tag current_user.profile.profile_photo, class: "rounded-circle mb-3", width: 120, height: 120 %>
-                <% else %>
-                  <%= image_tag "default-avatar.png", class: "rounded-circle mb-3", width: 120, height: 120 %>
-                <% end %>
-            <h5 class="card-title font-weight-bold text-dark">
-              <%= current_user.profile.first_name %> <%= current_user.profile.last_name %>
-            </h5>
-
-            <p class="card-text text-muted">
-              <strong>Email:</strong> <%= current_user.email %>
-            </p>
-
-            <p class="card-text">
-              <strong>Role:</strong>
-              <% if current_user.admin? %>
-                <span class="badge bg-danger">Admin</span>
-              <% elsif current_user.manager? %>
-                <span class="badge bg-warning text-dark">Manager</span>
-              <% else %>
-                <span class="badge bg-secondary">User</span>
-              <% end %>
-            </p>
-
-            <!-- Edit Profile Button -->
-            <%= link_to 'Edit Profile', edit_profile_path(current_user.profile), class: "btn btn-primary mt-3 px-4" %>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <div class="modal-body text-center">
+        <% if current_user.profile.profile_photo.attached? %>
+          <%= image_tag current_user.profile.profile_photo, class: "rounded-circle mb-3", width: 120, height: 120 %>
+        <% else %>
+          <%= image_tag "default-avatar.png", class: "rounded-circle mb-3", width: 120, height: 120 %>
+        <% end %>
+        <h5><%= current_user.profile.first_name %> <%= current_user.profile.last_name %></h5>
+        <p class="text-muted"><strong>Email:</strong> <%= current_user.email %></p>
+        <p><strong>Role:</strong>
+          <% if current_user.admin? %>
+            <span class="badge bg-danger">Admin</span>
+          <% elsif current_user.manager? %>
+            <span class="badge bg-warning text-dark">Manager</span>
+          <% else %>
+            <span class="badge bg-secondary">User</span>
+          <% end %>
+        </p>
+        <%= link_to 'Edit Profile', edit_profile_path(current_user.profile), class: "btn btn-primary mt-3" %>
       </div>
     </div>
   </div>
 </div>
 
-    
-
-<!-- Include Bootstrap's JS for Modal Functionality -->
-<%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js", integrity: "sha384-k6RqeWeci5ZR/Lv4MR0sA6A57eegAwrjANPrc6wF/qFV7bE0JH07hPH2oTQZ7OYt", crossorigin: "anonymous" %>
-
+<!-- Project Tables -->
 <div class="container mt-4">
   <div class="row">
-    <!-- Top 5 Projects -->
     <div class="col-md-6">
-      <h4>Top 5 Projects</h4>
-      <table class="table table-bordered">
+      <h4 class="text-success">Top 5 Projects</h4>
+      <table class="table table-striped table-hover">
         <thead class="table-success">
           <tr>
             <th>Project</th>
@@ -109,10 +83,9 @@
       </table>
     </div>
 
-    <!-- Bottom 5 Projects -->
     <div class="col-md-6">
-      <h4>Bottom 5 Projects</h4>
-      <table class="table table-bordered">
+      <h4 class="text-danger">Bottom 5 Projects</h4>
+      <table class="table table-striped table-hover">
         <thead class="table-danger">
           <tr>
             <th>Project</th>
@@ -136,7 +109,7 @@
   <!-- Earnings and Hours Chart -->
   <div class="row mt-4">
     <div class="col-md-12">
-      <h4>Monthly Earnings & Hours Logged</h4>
+      <h4 class="text-center">Monthly Earnings & Hours Logged</h4>
       <canvas id="earningsChart"></canvas>
     </div>
   </div>
@@ -147,25 +120,32 @@
   document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('earningsChart').getContext('2d');
     new Chart(ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
-        labels: <%= @monthly_earnings.keys.map { |date| date.strftime("%b %Y") }.to_json.html_safe %>,
+        labels: <%= @monthly_earnings.keys.to_json.html_safe %>,
         datasets: [
           {
             label: 'Earnings ($)',
             data: <%= @monthly_earnings.values.to_json.html_safe %>,
-            borderColor: 'blue',
-            fill: false
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
           },
           {
             label: 'Hours Logged',
             data: <%= @monthly_hours.values.to_json.html_safe %>,
-            borderColor: 'green',
-            fill: false
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
           }
         ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' }
+        }
       }
     });
   });
 </script>
-
