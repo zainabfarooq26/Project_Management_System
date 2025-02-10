@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   get "users/index"
-  get "profiles/edit"
-  get "profiles/update"
   namespace :manager do
     get "dashboard/index"
   end
@@ -12,7 +10,7 @@ Rails.application.routes.draw do
   root "home#index"
   resources :users, only: [:index]
   resources:clients, only: [:index,:show]
-  resource :profile, only: [:edit, :update]
+  resource :profile, only: [:show,:edit, :update]
   namespace :admin do
     get 'dashboard', to: 'dashboard#index'
       resources :dashboard, only: [:index]
