@@ -43,21 +43,43 @@ class Manager::ProjectsController < ApplicationController
             redirect_to assign_users_manager_client_project_path(@project.client, @project)
            end
   
-  
-  def index
-    @client = Client.find(params[:client_id])
-    if current_user.is_manager?
-      @projects = @client.projects
-    else
-      @projects = @client.projects
-    end
-    @project = @projects.first
-  end
-
+           
+          
   def new
     @project = @client.projects.build
   end
-
+ 
+  def index
+    @client = Client.find(params[:client_id])
+    @projects = @client.projects.left_joins(:users).distinct
+  
+    # Search functionality
+    if params[:search_query].present?
+      if params[:search_category].blank? # All Categories
+        @projects = @projects.where(
+          "projects.title ILIKE :query OR users.first_name ILIKE :query OR users.last_name ILIKE :query OR users.email ILIKE :query",
+          query: "%#{params[:search_query]}%"
+        )
+      else
+        case params[:search_category]
+        when "title"
+          @projects = @projects.where("projects.title ILIKE ?", "%#{params[:search_query]}%")
+        when "user"
+          @projects = @projects.where("users.first_name ILIKE :query OR users.last_name ILIKE :query OR users.email ILIKE :query", query: "%#{params[:search_query]}%")
+        end
+      end
+    end
+  
+    # Sorting by total earnings (Only for Managers)
+    if current_user.is_manager?
+      case params[:sort]
+      when "highest_paid"
+        @projects = @projects.order(total_earnings: :desc) # Highest earnings first
+      when "lowest_paid"
+        @projects = @projects.order(total_earnings: :asc) # Lowest earnings first
+      end
+    end
+  end
   def create
     @project = @client.projects.build(project_params)
     @project.manager = current_user

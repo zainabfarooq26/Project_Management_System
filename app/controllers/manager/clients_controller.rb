@@ -2,17 +2,39 @@ class Manager::ClientsController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_manager!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_client, only: [:show, :edit, :update, :destroy]
-
+  
   def index
     if current_user.is_manager?
-      @clients = current_user.clients  # Managers can see their clients
+      @clients = current_user.clients  
     else
-      @clients = Client.all  # Users can see all clients, but only view
+      @clients = Client.all  
+    end
+  
+    if params[:search_query].present?
+      query = "%#{params[:search_query]}%"
+      case params[:search_category]
+      when "name"
+        @clients = @clients.where("name ILIKE ?", query)
+      when "email"
+        @clients = @clients.where("email ILIKE ?", query)
+      when "phone"
+        @clients = @clients.where("phone ILIKE ?", query)
+      when "address"
+        @clients = @clients.where("address ILIKE ?", query)
+      when "project_title"
+        @clients = @clients.joins(:projects).where("projects.title ILIKE ?", query).distinct
+
+      else
+        # If no category is selected, search across all fields
+        @clients = @clients.left_joins(:projects).where(
+          "clients.name ILIKE ? OR clients.email ILIKE ? OR clients.phone ILIKE ? OR clients.address ILIKE ? OR projects.title ILIKE ?", 
+          query, query, query, query, query
+        ).distinct
+      end
     end
   end
 
   def show
-    # Users and managers can view the client details
   end
 
   def new
