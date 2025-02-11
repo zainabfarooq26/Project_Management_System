@@ -11,6 +11,7 @@ gem 'mini_magick'
 gem 'devise'
 gem 'groupdate'
 
+
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -66,3 +67,5 @@ end
 gem "sassc", "~> 2.4"
 
 gem "letter_opener", "~> 1.10"
+
+gem "jwt", "~> 2.10"
