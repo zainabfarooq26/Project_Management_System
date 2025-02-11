@@ -12,9 +12,9 @@ class Manager::TimeLogsController < ApplicationController
     @time_log = @project.time_logs.build(time_log_params.merge(user: current_user))
 
     if @time_log.save
-      redirect_to manager_client_projects_path(@client, @project), notice: "Time log added successfully."
+      redirect_to manager_client_projects_path(@client, @project), notice: 'Time log added successfully.'
     else
-      redirect_to manager_client_projects_path(@client, @project), alert: "Failed to add time log."
+      redirect_to manager_client_projects_path(@client, @project), alert: 'Failed to add time log.'
     end
   end
 
@@ -23,7 +23,7 @@ class Manager::TimeLogsController < ApplicationController
 
   def update
     if @time_log.update(time_log_params)
-      redirect_to manager_client_projects_path(@client, @project), notice: "Time log updated successfully."
+      redirect_to manager_client_projects_path(@client, @project), notice: 'Time log updated successfully.'
     else
       render :edit
     end
@@ -35,7 +35,6 @@ class Manager::TimeLogsController < ApplicationController
   end
 
   private
-
   def set_project
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
@@ -51,7 +50,7 @@ class Manager::TimeLogsController < ApplicationController
 
   def check_assignment
     unless current_user.projects.exists?(@project.id)
-      redirect_to manager_client_projects_path(@client, @project), alert: "You are not assigned to this project."
+      redirect_to manager_client_projects_path(@client, @project), alert: 'You are not assigned to this project.'
     end
   end
 end

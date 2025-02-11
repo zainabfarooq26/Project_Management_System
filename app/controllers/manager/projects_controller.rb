@@ -9,42 +9,41 @@ class Manager::ProjectsController < ApplicationController
   end
   
       def assign_users
-        @project = Project.find(params[:id]) # Ensure we are getting the correct project
-        @users = User.where.not(admin: true) # Exclude admins
+        @project = Project.find(params[:id]) 
+        @users = User.where.not(admin: true) 
         if request.post?
-          Rails.logger.debug "Params received: #{params.inspect}"  # Debugging line
+          Rails.logger.debug 'Params received: #{params.inspect}'  
       
           user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
-          Rails.logger.debug "User IDs to assign: #{user_ids}"
+          Rails.logger.debug 'User IDs to assign: #{user_ids}'
       
           if user_ids.any?
-            @project.user_ids = user_ids # Assign users to project
+            @project.user_ids = user_ids 
             if @project.save
-              flash[:notice] = "Users assigned successfully!"
+              flash[:notice] = 'Users assigned successfully!'
              redirect_to  manager_client_projects_path(@client)
 
             else
-              flash[:alert] = "Failed to assign users."
+              flash[:alert] = 'Failed to assign users.'
             end
           else
-            flash[:alert] = "No users selected."
+            flash[:alert] = 'No users selected.'
           end
         end
       end
+
           def remove_user
             @project = Project.find(params[:id])
             user = User.find(params[:user_id])
 
-            if @project.users.delete(user)  # Remove the user from the project
-              flash[:notice] = "#{user.first_name} #{user.last_name} was removed from the project."
+            if @project.users.delete(user)  
+              flash[:notice] = '#{user.first_name} #{user.last_name} was removed from the project.'
             else
-              flash[:alert] = "Failed to remove user from the project."
+              flash[:alert] = 'Failed to remove user from the project.'
             end
             redirect_to assign_users_manager_client_project_path(@project.client, @project)
            end
-  
-           
-          
+         
   def new
     @project = @client.projects.build
   end
@@ -52,10 +51,8 @@ class Manager::ProjectsController < ApplicationController
   def index
     @client = Client.find(params[:client_id])
     @projects = @client.projects.left_joins(:users).distinct
-  
-    # Search functionality
     if params[:search_query].present?
-      if params[:search_category].blank? # All Categories
+      if params[:search_category].blank?
         @projects = @projects.where(
           "projects.title ILIKE :query OR users.first_name ILIKE :query OR users.last_name ILIKE :query OR users.email ILIKE :query",
           query: "%#{params[:search_query]}%"
@@ -69,69 +66,66 @@ class Manager::ProjectsController < ApplicationController
         end
       end
     end
-  
-    # Sorting by total earnings (Only for Managers)
     if current_user.is_manager?
       case params[:sort]
       when "highest_paid"
-        @projects = @projects.order(total_earnings: :desc) # Highest earnings first
+        @projects = @projects.order(total_earnings: :desc) 
       when "lowest_paid"
-        @projects = @projects.order(total_earnings: :asc) # Lowest earnings first
+        @projects = @projects.order(total_earnings: :asc) 
       end
     end
   end
+  
   def create
     @project = @client.projects.build(project_params)
     @project.manager = current_user
 
     if @project.save
-      redirect_to manager_client_projects_path(@client), notice: "Project created successfully."
+      redirect_to manager_client_projects_path(@client), notice: 'Project created successfully.'
     else
-      Rails.logger.debug "Project Errors: #{@project.errors.full_messages}" 
+      Rails.logger.debug 'Project Errors: #{@project.errors.full_messages}'
       render :new
     end
   end
 
   def edit
-    # Only managers can edit projects
   end
 
   def show
     @project = Project.find(params[:id])
     @comments = @project.comments.order(created_at: :desc).limit(5)
-    @time_log = TimeLog.new # Allow users to create time logs
-    @comment = Comment.new # Allow users to create comments
+    @time_log = TimeLog.new 
+    @comment = Comment.new
   end
 
   def update
     if @project.update(project_params)
-      flash[:success] = "Project updated successfully!"
+      flash[:success] = 'Project updated successfully!'
       redirect_to manager_client_projects_path(@client)
     else
-      flash[:error] = "Error updating project!"
+      flash[:error] = 'Error updating project!'
       render :edit
     end
   end
 
   def destroy
     @project.destroy
-    flash[:success] = "Project deleted successfully!"
+    flash[:success] = 'Project deleted successfully!'
     redirect_to manager_client_projects_path(@client)
   end
 
   private
-
   def set_client
     @client = Client.find(params[:client_id])
   rescue ActiveRecord::RecordNotFound
-    flash[:alert] = "Client not found!"
+    flash[:alert] = 'Client not found!'
     redirect_to manager_clients_path
   end
 
   def set_project
     @project = @client.projects.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    flash[:alert] = "Project not found!"
+    flash[:alert] = 'Project not found!'
     redirect_to manager_client_projects_path(@client)
   end
 
@@ -140,7 +134,7 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def authorize_manager
-    redirect_to root_path, alert: "Unauthorized" unless current_user.is_manager?
+    redirect_to root_path, alert: 'Unauthorized' unless current_user.is_manager?
   end
   
 end

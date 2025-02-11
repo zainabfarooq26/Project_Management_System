@@ -9,7 +9,6 @@ class Manager::ClientsController < ApplicationController
     else
       @clients = Client.all  
     end
-  
     if params[:search_query].present?
       query = "%#{params[:search_query]}%"
       case params[:search_category]
@@ -23,9 +22,7 @@ class Manager::ClientsController < ApplicationController
         @clients = @clients.where("address ILIKE ?", query)
       when "project_title"
         @clients = @clients.joins(:projects).where("projects.title ILIKE ?", query).distinct
-
       else
-        # If no category is selected, search across all fields
         @clients = @clients.left_joins(:projects).where(
           "clients.name ILIKE ? OR clients.email ILIKE ? OR clients.phone ILIKE ? OR clients.address ILIKE ? OR projects.title ILIKE ?", 
           query, query, query, query, query
@@ -51,7 +48,7 @@ class Manager::ClientsController < ApplicationController
   end
 
   def edit
-    # This will only be accessible for managers
+
   end
 
   def update
@@ -68,7 +65,6 @@ class Manager::ClientsController < ApplicationController
   end
 
   private
-
   def client_params
     params.require(:client).permit(:name, :email, :phone, :address)
   end

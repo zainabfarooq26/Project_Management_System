@@ -19,18 +19,19 @@ class Manager::PaymentsController < ApplicationController
     if @payment.save
       redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment created successfully!'
     else
-      flash.now[:alert] = "Error creating payment!"
+      flash.now[:alert] = 'Error creating payment!'
       render :new
     end
   end
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @payment.update(payment_params)
       redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment updated successfully!'
     else
-      flash.now[:alert] = "Error updating payment!"
+      flash.now[:alert] = 'Error updating payment!'
       render :edit
     end
   end
@@ -44,19 +45,15 @@ class Manager::PaymentsController < ApplicationController
   end
 
   private
-
   def set_project
-    puts "Project ID from params: #{params[:project_id]}" # Debugging
+    puts "Project ID from params: #{params[:project_id]}" 
   @project = Project.find_by(id: params[:project_id])
-
   if @project.nil?
-    flash[:alert] = "⚠️ Project not found!"
+    flash[:alert] = 'Project not found!'
     redirect_to manager_assigned_projects_path and return
   end
-
-  # Allow managers to access all projects, but limit non-managers to assigned projects
   if !current_user.is_manager? && !current_user.projects.exists?(@project.id)
-    flash[:alert] = "⚠️ You are not assigned to this project!"
+    flash[:alert] = 'You are not assigned to this project!'
     redirect_to manager_client_projects_path and return
   end
   end
@@ -65,7 +62,7 @@ class Manager::PaymentsController < ApplicationController
     if @project.present?
       @client = @project.client
     else
-      flash[:alert] = "⚠️ Project not found!"
+      flash[:alert] = 'Project not found!'
       redirect_to manager_client_projects_path and return
     end
   end
@@ -74,7 +71,7 @@ class Manager::PaymentsController < ApplicationController
     @payment = @project.payments.find_by(id: params[:id])
 
     if @payment.nil?
-      flash[:alert] = "⚠️ Payment not found!"
+      flash[:alert] = 'Payment not found!'
       redirect_to manager_client_project_payments_path(@client, @project) and return
     end
   end
@@ -84,6 +81,6 @@ class Manager::PaymentsController < ApplicationController
   end
 
   def authorize_manager
-    redirect_to root_path, alert: "Unauthorized" unless current_user.is_manager?
+    redirect_to root_path, alert: 'Unauthorized' unless current_user.is_manager?
   end
 end

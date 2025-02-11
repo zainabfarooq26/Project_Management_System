@@ -9,12 +9,11 @@ class Manager::CommentsController < ApplicationController
   end
 
   def create
-    @comment = @project.comments.new(comment_params.merge(user: current_user)) # Associate comment with the user
-
+    @comment = @project.comments.new(comment_params.merge(user: current_user)) 
     if @comment.save
       respond_to do |format|
-        format.html { redirect_to manager_client_projects_path(@client, @project), notice: "Comment added successfully." }
-        format.js   # Looks for create.js.erb to render
+        format.html { redirect_to manager_client_projects_path(@client, @project), notice: 'Comment added successfully.' }
+        format.js   
       end
     else
       render :new
@@ -30,8 +29,8 @@ class Manager::CommentsController < ApplicationController
   def update
     if @comment.update(comment_params)
       respond_to do |format|
-        format.html { redirect_to manager_client_projects_path(@client, @project), notice: "Comment updated successfully." }
-        format.js   # Looks for update.js.erb to render
+        format.html { redirect_to manager_client_projects_path(@client, @project), notice: 'Comment updated successfully.' }
+        format.js  
       end
     else
       render :edit
@@ -40,11 +39,10 @@ class Manager::CommentsController < ApplicationController
 
   def destroy
     @comment.destroy
-    redirect_to manager_client_projects_path(@client, @project), notice: "Comment deleted successfully."
+    redirect_to manager_client_projects_path(@client, @project), notice: 'Comment deleted successfully.'
   end
 
   private
-
   def set_project
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
