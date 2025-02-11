@@ -39,8 +39,12 @@ Rails.application.routes.draw do
         get 'comments/new', to: 'comments#new', as: 'new_comment'
       end
     end
+  end
   
-    # Assigned Projects Route (Make it independent)
+  namespace :api do
+    namespace :v1 do
+      resources :projects, only: [:index, :show]
+    end
   end
   
 end
