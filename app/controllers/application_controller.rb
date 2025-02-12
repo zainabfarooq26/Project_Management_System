@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :check_user_status, if: :user_signed_in?
   def check_user_status
-    if current_user.active == false
+    if not current_user.active
       sign_out current_user
       redirect_to new_user_session_path, alert: 'Your account has been locked by an admin.'
     end

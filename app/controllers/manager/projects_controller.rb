@@ -48,31 +48,8 @@ class Manager::ProjectsController < ApplicationController
   end
  
   def index
-    @client = Client.find(params[:client_id])
-    @projects = @client.projects.left_joins(:users).distinct
-    if params[:search_query].present?
-      if params[:search_category].blank?
-        @projects = @projects.where(
-          "projects.title ILIKE :query OR users.first_name ILIKE :query OR users.last_name ILIKE :query OR users.email ILIKE :query",
-          query: "%#{params[:search_query]}%"
-        )
-      else
-        case params[:search_category]
-        when "title"
-          @projects = @projects.where("projects.title ILIKE ?", "%#{params[:search_query]}%")
-        when "user"
-          @projects = @projects.where("users.first_name ILIKE :query OR users.last_name ILIKE :query OR users.email ILIKE :query", query: "%#{params[:search_query]}%")
-        end
-      end
-    end
-    if current_user.is_manager?
-      case params[:sort]
-      when "highest_paid"
-        @projects = @projects.order(total_earnings: :desc) 
-      when "lowest_paid"
-        @projects = @projects.order(total_earnings: :asc) 
-      end
-    end
+      @client = Client.find(params[:client_id])
+      @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort]).call
   end
   
   def create
