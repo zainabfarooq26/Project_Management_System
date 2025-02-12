@@ -41,4 +41,3 @@ class ProjectsSearchService
       end
     end
   end
-  

@@ -2,7 +2,6 @@ module Manager::ProjectsHelper
     def assign_users_to_project(project, user_ids)
       user_ids = user_ids.reject(&:blank?) rescue []
       Rails.logger.debug "User IDs to assign: #{user_ids}"
-  
       if user_ids.any?
         project.user_ids = user_ids
         return project.save

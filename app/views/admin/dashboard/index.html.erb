@@ -1,16 +1,3 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Admin Dashboard</a>
-    <div class="d-flex align-items-center">
-      <!-- Profile Button (Triggers Modal) -->
-      <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
-        Profile
-      </button>
-    <div class="d-flex">
-      <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light me-3' %>
-    </div>
-  </div>
-</nav>
 <%= render 'shared/profile_modal' %>
 <h1 class="mb-4 text-center">Admin Management</h1>
 <p class="text-muted text-center">Welcome Admin, <strong><%= current_user.email %></strong>!</p>
