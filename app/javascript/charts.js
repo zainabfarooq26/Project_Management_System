@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+    console.log(1)
     const chartDataElement = document.getElementById("chart-data");
     if (!chartDataElement) return; 
     const labels = JSON.parse(chartDataElement.dataset.months);
