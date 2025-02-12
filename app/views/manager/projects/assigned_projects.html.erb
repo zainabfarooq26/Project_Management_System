@@ -1,25 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <div class="container-fluid">
-    <!-- Navbar Title Based on User Role -->
-    <a class="navbar-brand" href="#">
-      <%= current_user.manager? ? "Manager Dashboard" : "Projects Assigned" %> <!-- Show appropriate title -->
-    </a>
-    <div class="d-flex align-items-center">
-      <!-- Profile Button (Triggers Modal) -->
-      <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
-        Profile
-      </button>
-      <!-- Sign-Out Button -->
-      <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light me-3' %>
-    </div>
-  </div>
-</nav>
-
-<!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
-
 <h3 class="mb-3">Assigned Projects</h3>
-
 <% if @projects.any? %>
   <ul class="list-group">
     <% @projects.each do |project| %>

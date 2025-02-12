@@ -1,11 +1,8 @@
 <%= link_to "New Client", new_manager_client_path, class: "btn btn-outline-dark me-3" %>
-<!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
 <p>Welcome <%= current_user.manager? ? "manager" : "user" %>, <%= current_user.email %>!</p>
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2><i class="bi bi-kanban"></i> Clients Listing</h2>
-
-  <!-- Search Bar (Centered Right) -->
   <%= form_tag manager_clients_path, method: :get, class: "ms-auto me-3 w-50" do %>
     <div class="input-group">
       <!-- Category Dropdown -->
@@ -17,19 +14,14 @@
         <option value="address">Address</option>
         <option value="project_name">Project Name</option> 
       </select>
-      
-      <!-- Search Input -->
       <%= text_field_tag :search_query, params[:search_query], class: "form-control", 
         placeholder: "Search..." %>
-
-      <!-- Search Button with Font Awesome Icon -->
       <button type="submit" class="btn btn-dark">
         <i class="fas fa-search text-white"></i> <!-- White Search Icon -->
       </button>
     </div>
   <% end %>
 </div>
-
 <table class="table">
   <thead>
     <tr>

@@ -1,12 +1,10 @@
 <h1 class="mb-4">Project Details</h1>
-
 <div class="card shadow-sm mb-4">
   <div class="card-body">
     <h3 class="card-title"><%= @project.title %></h3>
     <p class="card-text"><strong>Description:</strong> <%= @project.description %></p>
   </div>
 </div>
-
 <div class="row">
   <div class="col-md-6">
     <div class="card shadow-sm mb-4">
@@ -16,7 +14,6 @@
       </div>
     </div>
   </div>
-
   <% if current_user.manager? %>  
     <div class="col-md-6">
       <div class="card shadow-sm mb-4">
@@ -27,8 +24,8 @@
       </div>
     </div>
   <% end %>
-</div>
 
+</div>
 <h3 class="mb-3">Recent Comments</h3>
 <div class="card shadow-sm">
   <div class="card-body">
@@ -48,7 +45,6 @@
     <% end %>
   </div>
 </div>
-
 <div class="mt-4">
   <%= link_to 'Back to Dashboard', manager_client_projects_path(@client), class: 'btn btn-secondary' %>
 </div>

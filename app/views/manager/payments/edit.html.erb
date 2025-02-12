@@ -1,7 +1,5 @@
 <h1>Edit Payment for <%= @project.title %></h1>
-
 <%= form_with(model: [@project, @payment], url: manager_client_project_payment_path(@client, @project, @payment), local: true) do |f| %>
-
   <div class="mb-3">
     <%= f.label :amount %>
     <%= f.number_field :amount, step: 0.01, value: @payment.amount, class: 'form-control' %>
@@ -14,7 +12,6 @@
   <%= f.label :status %>
   <%= f.select :status, [["Paid", "paid"], ["Pending", "pending"], ["Scheduled", "scheduled"]], { selected: @payment.status }, class: 'form-select' %>
 </div>
-
   <div class="mb-3">
     <%= f.submit "Update Payment", class: 'btn btn-primary' %>
   </div>
