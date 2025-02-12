@@ -59,7 +59,6 @@ class Manager::ProjectsController < ApplicationController
     if @project.save
       redirect_to manager_client_projects_path(@client), notice: 'Project created successfully.'
     else
-      Rails.logger.debug 'Project Errors: #{@project.errors.full_messages}'
       render :new
     end
   end
