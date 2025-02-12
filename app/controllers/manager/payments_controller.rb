@@ -44,7 +44,6 @@ class Manager::PaymentsController < ApplicationController
 
   private
   def set_project
-  puts "Project ID from params: #{params[:project_id]}" 
   @project = Project.find_by(id: params[:project_id])
   if @project.nil?
     flash[:alert] = 'Project not found!'

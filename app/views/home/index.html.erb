@@ -114,38 +114,10 @@
     </div>
   </div>
 </div>
-
+<div id="chart-data"
+     data-months='<%= @monthly_earnings&.keys&.to_json.html_safe %>'
+     data-earnings='<%= @monthly_earnings&.values&.to_json.html_safe %>'
+     data-hours='<%= @monthly_hours&.values&.to_json.html_safe %>'>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const ctx = document.getElementById('earningsChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: <%= @monthly_earnings.keys.to_json.html_safe %>,
-        datasets: [
-          {
-            label: 'Earnings ($)',
-            data: <%= @monthly_earnings.values.to_json.html_safe %>,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Hours Logged',
-            data: <%= @monthly_hours.values.to_json.html_safe %>,
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'top' }
-        }
-      }
-    });
-  });
-</script>
+<script src="/javascript/charts.js"></script> <!-- Link to external JS file -->
