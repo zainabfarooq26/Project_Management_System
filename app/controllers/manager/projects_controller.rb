@@ -12,11 +12,7 @@ class Manager::ProjectsController < ApplicationController
     @project = Project.find(params[:id]) 
     @users = User.where.not(admin: true) 
     if request.post?
-      Rails.logger.debug 'Params received: #{params.inspect}'  
-  
       user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
-      Rails.logger.debug 'User IDs to assign: #{user_ids}'
-  
       if user_ids.any?
         @project.user_ids = user_ids 
         if @project.save
@@ -34,7 +30,6 @@ class Manager::ProjectsController < ApplicationController
   def remove_user
     @project = Project.find(params[:id])
     user = User.find(params[:user_id])
-
     if @project.users.delete(user)  
       flash[:notice] = '#{user.first_name} #{user.last_name} was removed from the project.'
     else
