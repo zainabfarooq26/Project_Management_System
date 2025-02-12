@@ -22,6 +22,5 @@ class User < ApplicationRecord
     build_profile(first_name: "Default", last_name: "User") unless self.profile
     self.profile.save! 
   end
-  
-  end
+end
 

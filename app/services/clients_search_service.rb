@@ -27,5 +27,4 @@ class ClientsSearchService
   
       @clients
     end
-  end
-  
+end

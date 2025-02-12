@@ -16,5 +16,4 @@ module Manager::ProjectsHelper
         end
       end
     end
-  end
-  
+end

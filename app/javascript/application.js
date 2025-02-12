@@ -10,5 +10,4 @@ document.addEventListener("DOMContentLoaded", function() {
     select.addEventListener("change", function() {
       form.submit(); 
     });
-  });
-  
+});

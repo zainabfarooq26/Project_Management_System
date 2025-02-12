@@ -40,4 +40,4 @@ class ProjectsSearchService
         projects
       end
     end
-  end
+end

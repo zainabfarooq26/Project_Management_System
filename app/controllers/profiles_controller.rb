@@ -22,4 +22,3 @@ class ProfilesController < ApplicationController
     params.require(:profile).permit(:first_name, :last_name, :profile_photo)
   end
 end
-
