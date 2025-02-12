@@ -1,4 +1,3 @@
-# app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :check_user_status, if: :user_signed_in?

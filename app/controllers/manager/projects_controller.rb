@@ -8,41 +8,40 @@ class Manager::ProjectsController < ApplicationController
     @projects = current_user.projects.includes(:manager) 
   end
   
-      def assign_users
-        @project = Project.find(params[:id]) 
-        @users = User.where.not(admin: true) 
-        if request.post?
-          Rails.logger.debug 'Params received: #{params.inspect}'  
-      
-          user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
-          Rails.logger.debug 'User IDs to assign: #{user_ids}'
-      
-          if user_ids.any?
-            @project.user_ids = user_ids 
-            if @project.save
-              flash[:notice] = 'Users assigned successfully!'
-             redirect_to  manager_client_projects_path(@client)
-
-            else
-              flash[:alert] = 'Failed to assign users.'
-            end
-          else
-            flash[:alert] = 'No users selected.'
-          end
+  def assign_users
+    @project = Project.find(params[:id]) 
+    @users = User.where.not(admin: true) 
+    if request.post?
+      Rails.logger.debug 'Params received: #{params.inspect}'  
+  
+      user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
+      Rails.logger.debug 'User IDs to assign: #{user_ids}'
+  
+      if user_ids.any?
+        @project.user_ids = user_ids 
+        if @project.save
+          flash[:notice] = 'Users assigned successfully!'
+          redirect_to  manager_client_projects_path(@client)
+        else
+          flash[:alert] = 'Failed to assign users.'
         end
+      else
+        flash[:alert] = 'No users selected.'
       end
+    end
+  end
 
-          def remove_user
-            @project = Project.find(params[:id])
-            user = User.find(params[:user_id])
+  def remove_user
+    @project = Project.find(params[:id])
+    user = User.find(params[:user_id])
 
-            if @project.users.delete(user)  
-              flash[:notice] = '#{user.first_name} #{user.last_name} was removed from the project.'
-            else
-              flash[:alert] = 'Failed to remove user from the project.'
-            end
-            redirect_to assign_users_manager_client_project_path(@project.client, @project)
-           end
+    if @project.users.delete(user)  
+      flash[:notice] = '#{user.first_name} #{user.last_name} was removed from the project.'
+    else
+      flash[:alert] = 'Failed to remove user from the project.'
+    end
+    redirect_to assign_users_manager_client_project_path(@project.client, @project)
+    end
          
   def new
     @project = @client.projects.build
@@ -117,15 +116,14 @@ class Manager::ProjectsController < ApplicationController
   private
   def set_client
     @client = Client.find(params[:client_id])
-  rescue ActiveRecord::RecordNotFound
-    flash[:alert] = 'Client not found!'
-    redirect_to manager_clients_path
-  end
+ end
+
+ def set_project
+   @project = @client.projects.find(params[:id])
+ end
 
   def set_project
     @project = @client.projects.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    flash[:alert] = 'Project not found!'
     redirect_to manager_client_projects_path(@client)
   end
 

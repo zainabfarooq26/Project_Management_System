@@ -10,12 +10,11 @@ class Manager::PaymentsController < ApplicationController
   end
 
   def new
-    @payment = @project.payments.build
+    @payment = @project.payments.new
   end
 
   def create
     @payment = @project.payments.build(payment_params)
-
     if @payment.save
       redirect_to manager_client_project_payments_path(@client, @project), notice: 'Payment created successfully!'
     else
@@ -24,8 +23,7 @@ class Manager::PaymentsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit;end
 
   def update
     if @payment.update(payment_params)
@@ -46,7 +44,7 @@ class Manager::PaymentsController < ApplicationController
 
   private
   def set_project
-    puts "Project ID from params: #{params[:project_id]}" 
+  puts "Project ID from params: #{params[:project_id]}" 
   @project = Project.find_by(id: params[:project_id])
   if @project.nil?
     flash[:alert] = 'Project not found!'
@@ -69,7 +67,6 @@ class Manager::PaymentsController < ApplicationController
 
   def set_payment
     @payment = @project.payments.find_by(id: params[:id])
-
     if @payment.nil?
       flash[:alert] = 'Payment not found!'
       redirect_to manager_client_project_payments_path(@client, @project) and return
