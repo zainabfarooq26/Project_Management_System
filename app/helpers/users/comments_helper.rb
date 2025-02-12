@@ -1,2 +1,0 @@
-module Users::CommentsHelper
-end
