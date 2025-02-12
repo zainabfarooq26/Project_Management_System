@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if resource.admin?
       admin_dashboard_path 
-    elsif resource.is_manager? 
+    elsif resource.manager? 
       manager_clients_path  
     else
       manager_clients_path 

@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <!-- Navbar Title Based on User Role -->
     <a class="navbar-brand" href="#">
-      <%= current_user.is_manager? ? "Manager Dashboard" : "Projects Assigned" %> <!-- Show appropriate title -->
+      <%= current_user.manager? ? "Manager Dashboard" : "Projects Assigned" %> <!-- Show appropriate title -->
     </a>
     <div class="d-flex align-items-center">
       <!-- Profile Button (Triggers Modal) -->

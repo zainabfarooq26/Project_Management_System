@@ -2,14 +2,14 @@
   <div class="container-fluid">
     <!-- Navbar Title Based on User Role -->
     <a class="navbar-brand" href="#">
-      <%= current_user.is_manager? ? "Manager Dashboard" : "Clients Listing" %> <!-- Show appropriate title -->
+      <%= current_user.manager? ? "Manager Dashboard" : "Clients Listing" %> <!-- Show appropriate title -->
     </a>
     <div class="d-flex align-items-center">
       <!-- Profile Button (Triggers Modal) -->
       <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#profileDetailsModal">
         Profile
       </button>
-      <% if current_user.is_manager? %>  <!-- Show New Client link for Managers only -->
+      <% if current_user.manager? %>  <!-- Show New Client link for Managers only -->
     <%= link_to "New Client", new_manager_client_path, class: "btn btn-outline-light me-3" %>
   <% end %>
       <!-- Sign-Out Button -->
@@ -20,7 +20,7 @@
 
 <!-- Include the Profile Modal -->
 <%= render 'shared/profile_modal' %>
-<p>Welcome <%= current_user.is_manager? ? "manager" : "user" %>, <%= current_user.email %>!</p>
+<p>Welcome <%= current_user.manager? ? "manager" : "user" %>, <%= current_user.email %>!</p>
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2><i class="bi bi-kanban"></i> Clients Listing</h2>
 
@@ -69,7 +69,7 @@
         <td>
           <%= link_to 'Show', manager_client_path(client), class: 'btn btn-info' %>
 
-          <% if current_user.is_manager? %>  <!-- Show these options only for managers -->
+          <% if current_user.manager? %>  <!-- Show these options only for managers -->
             <%= link_to 'Edit', edit_manager_client_path(client), class: 'btn btn-warning' %>
             <%= link_to 'Delete', manager_client_path(client), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
             <%= link_to "View Projects", manager_client_projects_path(client), class: "btn btn-primary" %>

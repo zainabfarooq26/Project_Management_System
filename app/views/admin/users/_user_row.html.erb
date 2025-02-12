@@ -7,8 +7,8 @@
     </span>
   </td>
   <td> <!-- Role column -->
-    <span class="badge <%= user.is_manager? ? 'bg-info' : 'bg-secondary' %>">
-      <%= user.is_manager? ? 'Manager' : 'User' %>
+    <span class="badge <%= user.manager? ? 'bg-info' : 'bg-secondary' %>">
+      <%= user.manager? ? 'Manager' : 'User' %>
     </span>
   </td>
   <td> <!-- Actions column -->
@@ -20,7 +20,7 @@
           remote: true,
           data: { turbo_frame: "user_#{user.id}" } %>
 
-      <%= button_to (user.is_manager? ? 'Remove Manager' : 'Give Manager'), 
+      <%= button_to (user.manager? ? 'Remove Manager' : 'Give Manager'), 
           toggle_manager_admin_user_path(user),
           method: :patch, 
           class: 'btn btn-sm btn-warning me-2', 

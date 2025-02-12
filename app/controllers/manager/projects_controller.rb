@@ -108,7 +108,7 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def authorize_manager
-    redirect_to root_path, alert: 'Unauthorized' unless current_user.is_manager?
+    redirect_to root_path, alert: 'Unauthorized' unless current_user.manager?
   end
   
 end

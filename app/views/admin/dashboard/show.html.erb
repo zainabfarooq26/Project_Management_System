@@ -10,7 +10,7 @@
   <%= @user.active ? 'Active' : 'Inactive' %>
 </p>
 
-<% if @user.is_manager? %>
+<% if @user.manager? %>
   <p>
     <strong>Role:</strong> Manager
   </p>

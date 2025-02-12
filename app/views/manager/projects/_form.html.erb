@@ -50,7 +50,7 @@
 <% end %>
 
 <!-- Only show comments and time logs for Users -->
-<% unless current_user.is_manager? %>
+<% unless current_user.manager? %>
   <!-- Comments Section -->
   <h3>Comments</h3>
   <%= render 'comments/form', project: @project %>

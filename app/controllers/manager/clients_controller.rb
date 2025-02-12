@@ -4,7 +4,7 @@ class Manager::ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
   
   def index
-    @clients = current_user.is_manager? ? current_user.clients : Client.all  
+    @clients = current_user.manager? ? current_user.clients : Client.all  
     @clients = ClientsSearchService.new(@clients, params[:search_query], params[:search_category]).call
   end
   
@@ -48,6 +48,6 @@ class Manager::ClientsController < ApplicationController
   end
 
   def authorize_manager!
-    redirect_to clients_path, alert: 'Access denied. Managers only.' unless current_user.is_manager?
+    redirect_to clients_path, alert: 'Access denied. Managers only.' unless current_user.manager?
   end
 end

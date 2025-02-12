@@ -49,7 +49,7 @@ class Manager::PaymentsController < ApplicationController
     flash[:alert] = 'Project not found!'
     redirect_to manager_assigned_projects_path and return
   end
-  if !current_user.is_manager? && !current_user.projects.exists?(@project.id)
+  if !current_user.manager? && !current_user.projects.exists?(@project.id)
     flash[:alert] = 'You are not assigned to this project!'
     redirect_to manager_client_projects_path and return
   end
@@ -75,8 +75,7 @@ class Manager::PaymentsController < ApplicationController
   def payment_params
     params.require(:payment).permit(:amount, :paid_on, :status)
   end
-
   def authorize_manager
-    redirect_to root_path, alert: 'Unauthorized' unless current_user.is_manager?
+    redirect_to root_path, alert: 'Unauthorized' unless current_user.manager?
   end
 end

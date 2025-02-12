@@ -47,7 +47,7 @@ class Manager::TimeLogsController < ApplicationController
   def set_time_log
     @time_log = @project.time_logs.find(params[:id])
   end
-
+  
   def check_assignment
     unless current_user.projects.exists?(@project.id)
       redirect_to manager_client_projects_path(@client, @project), alert: 'You are not assigned to this project.'

@@ -1,6 +1,6 @@
 class Admin::UsersController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_user, only :[ :show, :edit, :update, :destroy, :toggle_status, :toggle_manager ]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :toggle_status, :toggle_manager]
   def index
     @users = User.where.not(admin: true)  
   end
@@ -49,12 +49,13 @@ class Admin::UsersController < ApplicationController
   end
 
   def toggle_manager
-      @user.update(is_manager: !@user.is_manager)
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("user_#{@user.id}", partial: "admin/users/user_row", locals: { user: @user }) }
-        format.html { redirect_to admin_users_path, notice: 'User manager rights updated.' }
-      end
+    @user.manager? ? @user.user! : @user.manager!
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("user_#{@user.id}", partial: "admin/users/user_row", locals: { user: @user }) }
+      format.html { redirect_to admin_users_path, notice: 'User manager rights updated.' }
+    end
   end
+  
 
   private
   def user_params

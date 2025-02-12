@@ -10,9 +10,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :projects, through: :project_assignments, dependent: :destroy
   has_many :time_logs, dependent: :destroy
   has_many :comments, dependent: :destroy
-  def manager?
-    is_manager == true
-  end
+  enum role: { user: 0, manager: 1, admin: 2 }
   def locked?
     !self.active? 
   end  
