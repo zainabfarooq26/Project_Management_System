@@ -4,16 +4,12 @@ class Manager::ProjectsController < ApplicationController
   before_action :set_project, only: %i[show edit update destroy assign_users remove_user]
   before_action :authorize_manager, only: %i[new create edit update destroy]
 
-  def assigned_projects
-    @projects = current_user.projects.includes(:manager)
-  end
-
   def assign_users
     @users = User.not_admin
     if request.post?
       user_ids = params[:project][:user_ids].presence || []
       if user_ids.any?
-        @project.users << User.where(id: user_ids).where.not(id: @project.user_ids) 
+         @project.users << User.where(id: user_ids).where.not(id: @project.user_ids) 
         if @project.save
           flash[:notice] = 'Users assigned successfully!'
           redirect_to manager_client_projects_path(@client)
