@@ -24,9 +24,6 @@ Rails.application.routes.draw do
     resources :dashboard, only: [:index] # Dashboard route for the manager
     resources :clients do
       resources :projects do
-        collection do
-          get 'assignedprojects', to: 'projects#assigned_projects'
-        end
         member do
           get 'assign_users'
           post 'assign_users', to: 'projects#assign_users'
