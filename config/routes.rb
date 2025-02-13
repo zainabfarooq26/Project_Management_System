@@ -15,13 +15,13 @@ Rails.application.routes.draw do
       resources :dashboard, only: [:index]
        resources :users do
          member do
-          patch :toggle_status  # Route for enabling/disabling a user
+          patch :toggle_status  
           patch :toggle_manager
          end
         end
   end
   namespace :manager do
-    resources :dashboard, only: [:index] # Dashboard route for the manager
+    resources :dashboard, only: [:index] 
     resources :clients do
       resources :projects do
         member do
