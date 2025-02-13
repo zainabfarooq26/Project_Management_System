@@ -10,7 +10,6 @@ class Manager::TimeLogsController < ApplicationController
 
   def create
     @time_log = @project.time_logs.build(time_log_params.merge(user: current_user))
-
     if @time_log.save
       redirect_to manager_client_projects_path(@client, @project), notice: 'Time log added successfully.'
     else
@@ -18,8 +17,7 @@ class Manager::TimeLogsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit;end
 
   def update
     if @time_log.update(time_log_params)

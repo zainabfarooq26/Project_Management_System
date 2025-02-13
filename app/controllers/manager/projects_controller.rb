@@ -1,23 +1,22 @@
 class Manager::ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_client
-  before_action :set_project, only: %i[show edit update destroy]
-  before_action :authorize_manager, only: %i[new create edit update destroy] 
+  before_action :set_project, only: %i[show edit update destroy assign_users remove_user]
+  before_action :authorize_manager, only: %i[new create edit update destroy]
 
   def assigned_projects
-    @projects = current_user.projects.includes(:manager) 
+    @projects = current_user.projects.includes(:manager)
   end
-  
+
   def assign_users
-    @project = Project.find(params[:id]) 
     @users = User.not_admin
     if request.post?
-      user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
+      user_ids = params[:project][:user_ids].presence || []
       if user_ids.any?
-        @project.user_ids = user_ids 
+        @project.user_ids = user_ids
         if @project.save
           flash[:notice] = 'Users assigned successfully!'
-          redirect_to  manager_client_projects_path(@client)
+          redirect_to manager_client_projects_path(@client)
         else
           flash[:alert] = 'Failed to assign users.'
         end
@@ -28,25 +27,23 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def remove_user
-    @project = Project.find(params[:id])
-    user = User.find(params[:user_id])
-    if @project.users.delete(user)  
-      flash[:notice] = '#{user.first_name} #{user.last_name} was removed from the project.'
+    user = User.find_by(id: params[:user_id])
+    if user && @project.users.delete(user)
+      flash[:notice] = "#{user.first_name} #{user.last_name} was removed from the project."
     else
       flash[:alert] = 'Failed to remove user from the project.'
     end
     redirect_to assign_users_manager_client_project_path(@project.client, @project)
-    end
-         
+  end
+
+  def index
+    @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort]).call
+  end
+
   def new
     @project = @client.projects.build
   end
- 
-  def index
-      @client = Client.find(params[:client_id])
-      @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort]).call
-  end
-  
+
   def create
     @project = @client.projects.build(project_params)
     @project.manager = current_user
@@ -58,43 +55,33 @@ class Manager::ProjectsController < ApplicationController
     end
   end
 
-  def edit
-  end
-
   def show
-    @project = Project.find(params[:id])
     @comments = @project.comments.order(created_at: :desc).limit(5)
-    @time_log = TimeLog.new 
+    @time_log = TimeLog.new
     @comment = Comment.new
   end
 
   def update
     if @project.update(project_params)
-      flash[:success] = 'Project updated successfully!'
-      redirect_to manager_client_projects_path(@client)
+      redirect_to manager_client_projects_path(@client), notice: 'Project updated successfully!'
     else
-      flash[:error] = 'Error updating project!'
+      flash[:alert] = 'Error updating project!'
       render :edit
     end
   end
 
   def destroy
     @project.destroy
-    flash[:success] = 'Project deleted successfully!'
-    redirect_to manager_client_projects_path(@client)
+    redirect_to manager_client_projects_path(@client), notice: 'Project deleted successfully!'
   end
 
   private
   def set_client
     @client = Client.find(params[:client_id])
- end
+  end
 
- def set_project
-   @project = @client.projects.find(params[:id])
- end
   def set_project
     @project = @client.projects.find(params[:id])
-    redirect_to manager_client_projects_path(@client)
   end
 
   def project_params
@@ -104,5 +91,4 @@ class Manager::ProjectsController < ApplicationController
   def authorize_manager
     redirect_to root_path, alert: 'Unauthorized' unless current_user.manager?
   end
-  
 end
