@@ -8,7 +8,6 @@
           <strong><%= project.title %></strong><br>
           <span class="text-muted">
           Assigned Users: <%= project.users.map { |user| user.first_name.present? ? "#{user.first_name} #{user.last_name}" : user.email }.join(", ") %>
-
           </span><br>
           <span class="text-muted">
           Assigned By: <%= project.manager&.first_name.present? ? "#{project.manager.first_name} #{project.manager.last_name}" : project.manager&.email %>

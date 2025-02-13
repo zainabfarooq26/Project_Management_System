@@ -16,21 +16,21 @@
     <% @payments.each do |payment| %>
       <tr>
         <td><%= number_to_currency(payment.amount) %></td>
-            <td>
-            <% if payment.status == 'pending' %>
-                <span class="badge bg-warning">Pending</span>
-            <% elsif payment.status == 'scheduled' %>
-                <span class="badge bg-primary">Scheduled</span>
-            <% elsif payment.status == 'paid' %>
-                <span class="badge bg-success">Paid</span>
-            <% else %>
-                <span class="badge bg-secondary">Unknown</span>
-            <% end %>
-            </td>
-        <td><%= payment.paid_on.present? ? payment.paid_on.strftime("%Y-%m-%d") : "N/A" %></td>
         <td>
-        <%= link_to 'Edit', edit_manager_client_project_payment_path(@client, @project, payment), class: 'btn btn-warning' %>
-        <%= link_to 'Delete', manager_client_project_payment_path(@client, @project, payment), class: 'btn btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+          <% badge_class = case payment.status.to_sym
+            when :pending then "bg-warning"
+            when :scheduled then "bg-primary"
+            when :paid then "bg-success"
+            else "bg-secondary"
+          end %>
+          <span class="badge <%= badge_class %>">
+            <%= payment.status.humanize %>
+          </span>
+        </td>
+        <td><%= payment.paid_on&.strftime("%Y-%m-%d") || "N/A" %></td>
+        <td>
+          <%= link_to 'Edit', edit_manager_client_project_payment_path(@client, @project, payment), class: 'btn btn-warning' %>
+          <%= link_to 'Delete', manager_client_project_payment_path(@client, @project, payment), class: 'btn btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>

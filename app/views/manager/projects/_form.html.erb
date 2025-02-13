@@ -2,7 +2,6 @@
               url: project.new_record? ? manager_client_projects_path(@client) : manager_client_project_path(@client, project), 
               local: true, 
               html: { multipart: true }) do |form| %>
-
   <% if project.errors.any? %>
     <div class="alert alert-danger">
       <h4><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h4>
@@ -13,24 +12,19 @@
       </ul>
     </div>
   <% end %>
-
   <div class="mb-3">
     <%= form.label :title, class: "form-label" %>
     <%= form.text_field :title, class: "form-control", placeholder: "Enter project title" %>
   </div>
-
   <div class="mb-3">
     <%= form.label :description, class: "form-label" %>
     <%= form.text_area :description, class: "form-control", rows: 4, placeholder: "Describe your project" %>
   </div>
-
-  <!-- File upload field for project attachments -->
   <div class="mb-3">
     <%= form.label :attachments, "Upload Attachments", class: "form-label" %>
     <%= form.file_field :attachments, multiple: true, class: "form-control" %>
     <small class="form-text text-muted">You can select multiple files.</small>
   </div>
-
   <% if project.persisted? && project.attachments.attached? %>
     <div class="mb-3">
       <h5>Uploaded Files:</h5>
@@ -43,26 +37,18 @@
       </ul>
     </div>
   <% end %>
-
   <div class="mb-3">
     <%= form.submit project.new_record? ? "Create Project" : "Update Project", class: "btn btn-primary w-100" %>
   </div>
 <% end %>
-
-<!-- Only show comments and time logs for Users -->
 <% unless current_user.manager? %>
-  <!-- Comments Section -->
   <h3>Comments</h3>
   <%= render 'comments/form', project: @project %>
-
   <div id="comments-list">
     <%= render 'comments/comments_list', project: @project %>
   </div>
-
-  <!-- Time Logs Section -->
   <h3>Time Logs</h3>
   <%= render 'time_logs/form', project: @project %>
-
   <div id="time-logs-list">
     <%= render 'time_logs/time_logs_list', project: @project %>
   </div>

@@ -13,7 +13,7 @@ class Manager::ProjectsController < ApplicationController
     if request.post?
       user_ids = params[:project][:user_ids].presence || []
       if user_ids.any?
-        @project.user_ids = user_ids
+        @project.users << User.where(id: user_ids).where.not(id: @project.user_ids) 
         if @project.save
           flash[:notice] = 'Users assigned successfully!'
           redirect_to manager_client_projects_path(@client)
