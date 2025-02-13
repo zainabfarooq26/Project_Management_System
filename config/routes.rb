@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
-
   root "home#index"
   resources :users, only: [:index]
   resources:clients, only: [:index,:show]
@@ -40,7 +39,6 @@ Rails.application.routes.draw do
       end
     end
   end
-  
   namespace :api do
     namespace :v1 do
     end

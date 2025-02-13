@@ -8,7 +8,9 @@ class Manager::ClientsController < ApplicationController
     @clients = ClientsSearchService.new(@clients, params[:search_query], params[:search_category]).call
   end
   
-  def show; end
+  def show
+    @client = Client.includes(projects: :users).find(params[:id])
+  end
 
   def new
     @client = current_user.clients.build
