@@ -1,7 +1,8 @@
 class User < ApplicationRecord
   after_create :create_profile
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
   validates :active, inclusion: { in: [true, false] }
   has_one_attached :profile_photo
   has_one :profile, dependent: :destroy

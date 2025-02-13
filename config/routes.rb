@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
+      devise_for :users, controllers: { sessions: 'api/v1/sessions' }, skip: [:registrations, :passwords]
     end
   end
 end
