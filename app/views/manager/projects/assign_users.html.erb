@@ -6,10 +6,14 @@
     <div class="mb-3">
       <%= form.label :user_ids, "Select Users to Assign", class: "form-label fw-bold" %>
       
-      <div class="border p-3 rounded bg-light">
-        <%= user_checkboxes(form, @users) %>
-      </div>
+  <div class="border p-3 rounded bg-light">
+  <% @users.each do |user| %>
+    <div class="form-check">
+      <%= check_box_tag "project[user_ids][]", user.id, @project.users.include?(user), class: "form-check-input" %>
+      <%= label_tag "project[user_ids][]", "#{user.first_name} #{user.last_name} (#{user.email})", class: "form-check-label" %>
     </div>
+  <% end %>
+</div>
 
     <div class="d-flex justify-content-between">
       <%= form.submit "Assign Users", class: "btn btn-primary px-4" %>

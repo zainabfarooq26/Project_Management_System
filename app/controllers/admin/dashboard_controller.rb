@@ -1,7 +1,7 @@
 class Admin::DashboardController < ApplicationController
   before_action :authenticate_admin!
   def index
-    @users = User.where.not(admin: true)  
+    @users = User.not_admin 
   end
   private
   def authenticate_admin!

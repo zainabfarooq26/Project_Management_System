@@ -2,7 +2,7 @@ class Admin::UsersController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_user, only: [:show, :edit, :update, :destroy, :toggle_status, :toggle_manager]
   def index
-    @users = User.where.not(admin: true)  
+    @users = User.not_admin
   end
 
   def new

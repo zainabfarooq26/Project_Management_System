@@ -10,7 +10,7 @@ class Manager::ProjectsController < ApplicationController
   
   def assign_users
     @project = Project.find(params[:id]) 
-    @users = User.where.not(admin: true) 
+    @users = User.not_admin
     if request.post?
       user_ids = params[:project][:user_ids].reject(&:blank?) rescue []
       if user_ids.any?
@@ -92,7 +92,6 @@ class Manager::ProjectsController < ApplicationController
  def set_project
    @project = @client.projects.find(params[:id])
  end
-
   def set_project
     @project = @client.projects.find(params[:id])
     redirect_to manager_client_projects_path(@client)
