@@ -82,7 +82,6 @@
                     <li>
                       <i class="bi bi-chat-text"></i> <%= comment.content %> - 
                       <strong><%= comment.user.first_name %> <%= comment.user.last_name %></strong>
-          
                       <% if comment.user == current_user %>
                         <%= link_to "Edit", edit_manager_client_project_comment_path(project.client, project, comment), class: "btn btn-sm btn-warning ms-2" %>
                         <%= link_to "Delete", manager_client_project_comment_path(project.client, project, comment), data: { turbo_method: :delete,turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>

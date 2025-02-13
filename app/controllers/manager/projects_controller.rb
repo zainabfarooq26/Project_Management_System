@@ -33,7 +33,12 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def index
-    @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort]).call
+    def index
+      @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort])
+                                       .call
+                                       .includes(:users, :manager, time_logs: :user)
+    end
+    
   end
 
   def new
@@ -52,6 +57,7 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def show
+    @project = @client.projects.includes(:users, :manager, time_logs: :user).find(params[:id])
     @comments = @project.comments.order(created_at: :desc).limit(5)
     @time_log = TimeLog.new
     @comment = Comment.new
