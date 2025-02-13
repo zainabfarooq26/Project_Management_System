@@ -28,7 +28,6 @@
           data: { turbo_frame: "user_#{user.id}" } %>
 
       <%= link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-sm btn-info me-2' %>
-
       <%= button_to 'Delete', admin_user_path(user), 
           method: :delete,
           data: { confirm: 'Are you sure?' }, 

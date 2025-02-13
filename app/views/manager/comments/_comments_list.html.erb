@@ -3,12 +3,11 @@
       <div class="card-body">
         <p class="mb-1"><strong><%= comment.user.profile.name %>:</strong> <%= comment.content %></p>
         <small class="text-muted">Posted on <%= comment.created_at.strftime("%B %d, %Y %H:%M") %></small>
-        
-        <% if comment.user == current_user %> <!-- Only the comment author can delete -->
+        <% if comment.user == current_user %> 
           <%= link_to "Delete", manager_client_project_comment_path(comment.project.client, comment.project, comment),
                         method: :delete, class: "btn btn-sm btn-danger", data: { confirm: "Are you sure?" } %>
         <% end %>
       </div>
     </div>
-  <% end %>
+<% end %>
   

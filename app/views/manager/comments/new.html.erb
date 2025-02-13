@@ -1,16 +1,7 @@
 <%= form_with(url: manager_client_project_comments_path(@client, @project), model: @comment, remote: true, html: { id: "new_comment_form", class: "needs-validation" }, data: { turbo: false }) do |form| %>
   <div class="card shadow-sm border-0 rounded p-3">
     <h5 class="card-title text-primary">Add a Comment</h5>
-    <% if @comment.errors.any? %>
-      <div class="alert alert-danger" role="alert">
-        <strong><%= pluralize(@comment.errors.count, "error") %> prevented submission:</strong>
-        <ul>
-          <% @comment.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render 'shared/error_messages', object: @comment %>
     <div class="form-floating mb-3">
       <%= form.text_area :content, class: "form-control", placeholder: "Write your comment here...", rows: 3, required: true %>
       <%= form.label :content, "Your Comment" %>

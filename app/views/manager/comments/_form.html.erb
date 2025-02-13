@@ -3,10 +3,8 @@
     <%= form.label :content, "Comment" %>
     <%= form.text_area :content, class: "form-control", required: true %>
   </div>
-
   <div class="mt-3">
     <%= form.submit "Save Comment", class: "btn btn-primary" %>
     <%= link_to "Cancel", manager_client_project_path(@client, @project), class: "btn btn-secondary" %>
   </div>
-
 <% end %>
