@@ -22,5 +22,4 @@ class ApplicationController < ActionController::Base
   def admin_signed_in?
     current_user&.admin?
   end
-  
 end

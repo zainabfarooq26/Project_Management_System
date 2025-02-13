@@ -7,11 +7,9 @@ gem "sprockets-rails"
 gem "bootstrap"
 gem "sassc-rails"
 gem "image_processing", "~> 1.2"
-gem 'mini_magick'
-gem 'devise'
-gem 'groupdate'
-
-
+gem "mini_magick"
+gem "devise"
+gem "groupdate"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]

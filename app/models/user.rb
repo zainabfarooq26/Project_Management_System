@@ -26,4 +26,3 @@ class User < ApplicationRecord
     self.profile.save! 
   end
 end
-
