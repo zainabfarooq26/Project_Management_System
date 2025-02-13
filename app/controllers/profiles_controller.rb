@@ -4,9 +4,11 @@ class ProfilesController < ApplicationController
   def show
     @profile = current_user.profile
   end
+
   def edit
     @profile = current_user.profile
   end
+
   def update
     @profile = current_user.profile
     if @profile.update(profile_params)
@@ -17,6 +19,7 @@ class ProfilesController < ApplicationController
       render :edit
     end
   end
+  
   private
   def profile_params
     params.require(:profile).permit(:first_name, :last_name, :profile_photo)
