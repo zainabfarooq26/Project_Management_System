@@ -2,36 +2,29 @@ module Api
     module V1
       class ApplicationController < ::ApplicationController
         protect_from_forgery with: :null_session
-        before_action :authenticate_user!
-        before_action :authorize_role
-        rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-        rescue_from StandardError, with: :handle_standard_error
-  
+        before_action :authenticate_request
+        attr_reader :current_user
+
         private
-        def authorize_role
-          return if current_user.admin? 
-          if manager_request? && !current_user.manager?
-            render json: { error: "Not authorized" }, status: :forbidden
-          elsif user_request? && !(current_user.manager? || current_user.user?)
-            render json: { error: "Not authorized" }, status: :forbidden
+        def authenticate_request
+            header = request.headers["Authorization"]
+            Rails.logger.info "Authorization Header: #{header}"  # Debugging line
+            if header.blank?
+              render json: { error: "No verification key available" }, status: :unauthorized
+              return
+            end
+            token = header.split(" ").last
+            Rails.logger.info "Extracted Token: #{token}"  # Debugging line
+            begin
+              decoded_token = JsonWebToken.decode(token)
+              Rails.logger.info "Decoded Token: #{decoded_token}"  # Debugging line
+              @current_user = User.find(decoded_token[:user_id])
+            rescue ActiveRecord::RecordNotFound
+              render json: { error: "User not found" }, status: :unauthorized
+            rescue JWT::DecodeError
+              render json: { error: "Invalid or expired token" }, status: :unauthorized
+            end
           end
-        end
-
-        def manager_request?
-          request.path.start_with?("/api/v1/manager")
-        end
-
-        def user_request?
-          request.path.start_with?("/api/v1/user")
-        end
-  
-        def record_not_found
-          render json: { error: 'Record not found' }, status: :not_found
-        end
-  
-        def handle_standard_error(exception)
-          render json: { error: exception.message }, status: :internal_server_error
-        end
       end
     end
 end
