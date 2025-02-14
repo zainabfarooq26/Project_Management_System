@@ -316,7 +316,7 @@
     ]
     jwt.expiration_time = 1.day.to_i
   end
-  
+
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is

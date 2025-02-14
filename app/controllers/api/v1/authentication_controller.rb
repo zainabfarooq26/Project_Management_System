@@ -20,20 +20,19 @@ module Api
             token = JsonWebToken.encode(user_id: user.id)
             render json: { token: token, user: user }, status: :ok
           else
-            render json: { error: "Invalid Email or Password" }, status: :unauthorized
+            render json: { error: 'Invalid Email or Password' }, status: :unauthorized
           end
         end
   
         def logout
-          render json: { message: "Logged out successfully" }, status: :ok
+          render json: { message: 'Logged out successfully' }, status: :ok
         end
   
         private
-  
         def user_params
           params.permit(:email, :password, :password_confirmation)
         end
       end
     end
-  end
+end
   

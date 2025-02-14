@@ -12,7 +12,6 @@ class User < ApplicationRecord
   has_many :time_logs, dependent: :destroy
   has_many :comments, dependent: :destroy
   enum role: { user: 0, manager: 1, admin: 2 }
-
   scope :not_admin, -> { where(admin: false) }
 
   def locked?

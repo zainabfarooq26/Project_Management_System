@@ -41,6 +41,18 @@ Rails.application.routes.draw do
       post 'auth/register', to: 'authentication#register'
       post 'auth/login', to: 'authentication#login'
       delete 'auth/logout', to: 'authentication#logout'
+      resources :projects, only: [:index, :show]
+      namespace :admin do
+        resources :projects, only: [:create, :update, :destroy]
+        resources :payments, only: [:create, :update, :destroy]
+      end
+      namespace :manager do
+        resources :projects, only: [:create, :update]
+        resources :payments, only: [:create, :update]
+      end
+      namespace :user do
+        resources :projects, only: [:index, :show]
+      end
     end
   end
 end
