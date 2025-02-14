@@ -3,6 +3,8 @@ module Api
       module Admin
         class ProjectsController < ApplicationController
           before_action :authorize_admin
+          before_action:set_project,only:[:update,:delete]
+          before_action:payment_params,only:[:create]
   
           def create
             @project = Project.new(project_params)
