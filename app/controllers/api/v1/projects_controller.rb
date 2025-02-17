@@ -7,6 +7,15 @@ module Api
         @projects=Project.all
         render json: @projects, status: :ok
       end
+      def search
+        api_search_service = ApisSearchService.new(params)
+        @projects = api_search_service.search
+        if @projects.empty?
+          render json: { error: 'No projects found matching your criteria' }, status: :not_found
+        else
+          render json: @projects, status: :ok
+        end
+      end
 
       private
       def fetch_projects
