@@ -3,15 +3,11 @@ module Api
       module Manager
         class ProjectsController < Api::V1::BaseController
           before_action :authorize_manager
-          before_action :set_project, only: [:show, :update, :destroy]
+          before_action :set_project, only: [ :update, :destroy]
   
           def index
             @projects = current_user.managed_projects
             render json: @projects, status: :ok
-          end
-  
-          def show
-            render json: @project, status: :ok
           end
   
           def create
@@ -49,4 +45,3 @@ module Api
       end
     end
 end
-  

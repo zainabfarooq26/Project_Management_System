@@ -41,13 +41,17 @@ Rails.application.routes.draw do
       post 'auth/register', to: 'authentication#register'
       post 'auth/login', to: 'authentication#login'
       delete 'auth/logout', to: 'authentication#logout'
-      resources :projects, only: [:index, :show]
+      resources :projects, only: [:index, :show] do
+         collection do
+          get :search  
+         end
+      end
       namespace :admin do
         resources :projects, only: [:create, :update, :destroy]
         resources :payments, only: [:create, :update, :destroy]
       end
       namespace :manager do
-        resources :projects, only: [:create, :update, :destroy, :show] 
+        resources :projects, only: [:create, :update, :destroy] 
         resources :payments, only: [:create, :update, :destroy]
       end
       namespace :user do

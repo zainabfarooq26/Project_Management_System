@@ -11,7 +11,8 @@ module Api
           return
         end
         begin
-          decoded_token = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base), true, algorithm: 'HS256')
+          decoded_token = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base),
+          true, algorithm: 'HS256')
           Rails.logger.info "Decoded Token: #{decoded_token}"  
           user_id = decoded_token[0]['user_id']  
           if user_id.nil?
@@ -30,11 +31,13 @@ module Api
       end
     
       def authorize_manager
-        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.manager? || current_user&.admin?
+        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.manager? ||
+        current_user&.admin?
       end
     
       def authorize_user
-        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.user? || current_user&.manager? || current_user&.admin?
+        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.user? || current_user&.manager?
+         || current_user&.admin?
       end
     end
   end

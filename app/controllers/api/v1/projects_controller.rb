@@ -4,7 +4,8 @@ module Api
       before_action :authenticate_request
 
       def index
-        render json: Project.all, status: :ok
+        @projects=Project.all
+        render json: @projects, status: :ok
       end
 
       private
