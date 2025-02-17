@@ -32,11 +32,11 @@ class Manager::ProjectsController < ApplicationController
     redirect_to assign_users_manager_client_project_path(@project.client, @project)
   end
 
-    def index
+  def index
       @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort])
                                        .call
                                        .includes(:users, :manager, time_logs: :user)
-    end
+  end
 
   def new
     @project = @client.projects.build

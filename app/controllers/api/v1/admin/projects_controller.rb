@@ -1,7 +1,7 @@
 module Api
     module V1
       module Admin
-        class ProjectsController < ApplicationController
+        class ProjectsController < Api::V1::BaseController
           before_action :authorize_admin
           before_action:set_project,only:[:update,:delete]
           before_action:payment_params,only:[:create]

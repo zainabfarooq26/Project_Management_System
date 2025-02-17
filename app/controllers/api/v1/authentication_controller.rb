@@ -1,6 +1,6 @@
 module Api
     module V1
-      class AuthenticationController < ApplicationController
+      class AuthenticationController < Api::V1::BaseController
         before_action :authenticate_user!, only: [:logout]
         skip_before_action :authenticate_request, only: [:login, :register]
         def register

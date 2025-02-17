@@ -1,7 +1,7 @@
 module Api
     module V1
       module Admin
-        class PaymentsController < ApplicationController
+        class PaymentsController < Api::V1::BaseController
           before_action :authorize_admin
           before_action:set_payment,only:[:update,:delete]
           before_action:payment_params,only:[:create]
