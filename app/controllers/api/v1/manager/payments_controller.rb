@@ -4,7 +4,7 @@ module Api
         class PaymentsController < Api::V1::BaseController
           before_action :authorize_manager
           before_action :set_payment, only: [:update, :destroy]
-          
+
           def create
             @payment = Payment.new(payment_params)
             if @payment.save
@@ -38,4 +38,3 @@ module Api
       end
     end
   end
-  
