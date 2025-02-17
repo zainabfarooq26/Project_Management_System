@@ -7,6 +7,7 @@ module Api
         @projects=Project.all
         render json: @projects, status: :ok
       end
+      
       def search
         api_search_service = ApisSearchService.new(params)
         @projects = api_search_service.search
