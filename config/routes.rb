@@ -47,8 +47,8 @@ Rails.application.routes.draw do
         resources :payments, only: [:create, :update, :destroy]
       end
       namespace :manager do
-        resources :projects, only: [:create, :update,:destroy, :show] 
-        resources :payments, only: [:create, :update]
+        resources :projects, only: [:create, :update, :destroy, :show] 
+        resources :payments, only: [:create, :update, :destroy]
       end
       namespace :user do
         resources :projects, only: [:index, :show]
