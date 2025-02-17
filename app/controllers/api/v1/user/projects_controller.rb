@@ -15,15 +15,6 @@ module Api
           end
   
           private
-  
-          def authorize_user
-            Rails.logger.info "Current User: #{current_user.inspect}"  
-            unless current_user&.user?
-            Rails.logger.info "Authorization failed: Not a user"
-            render json: { error: "Not authorized" }, status: :forbidden
-            end
-          end
-          
           def set_project
             @project = current_user.projects.find_by(id: params[:id])
             render json: { error: "Project not found" }, status: :not_found unless @project

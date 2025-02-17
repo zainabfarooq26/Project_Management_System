@@ -29,10 +29,6 @@ module Api
         end
 
         private
-        def authorize_admin
-          render json: { error: "Not authorized" }, status: :forbidden unless current_user.admin?
-        end
-
         def payment_params
           params.require(:payment).permit(:amount, :paid_on, :status, :project_id)
         end

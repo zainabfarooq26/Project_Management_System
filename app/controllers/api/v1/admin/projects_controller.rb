@@ -28,10 +28,6 @@ module Api
           end
   
           private
-          def authorize_admin
-            render json: { error: 'Not authorized'}, status: :forbidden unless current_user.admin?
-          end
-  
           def set_project
             @project = Project.find(params[:id])
           end
