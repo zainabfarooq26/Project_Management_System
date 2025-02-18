@@ -5,12 +5,14 @@ class ProjectsSearchService
       @search_category = search_category.to_s.strip.presence
       @sort_order = sort_order
     end
+
     def call
       projects = @client.projects.left_joins(:users).distinct
       projects = apply_search(projects) if @search_query.present?
       projects = apply_sorting(projects)
       projects
     end
+
     private
     def apply_search(projects)
       query = "%#{@search_query}%"
@@ -30,6 +32,7 @@ class ProjectsSearchService
         end
       end
     end
+    
     def apply_sorting(projects)
       case @sort_order
       when "highest_paid"

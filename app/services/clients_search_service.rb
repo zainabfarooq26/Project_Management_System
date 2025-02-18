@@ -4,6 +4,7 @@ class ClientsSearchService
       @search_query = search_query
       @search_category = search_category
     end
+
     def call
       return @clients if @search_query.blank?
       query = "%#{@search_query}%"
@@ -24,7 +25,6 @@ class ClientsSearchService
           query, query, query, query, query
         ).distinct
       end
-  
       @clients
     end
 end

@@ -1,8 +1,10 @@
 class ApisSearchService
+
     def initialize(params)
       @params = params
       @projects = Project.all
     end
+
     def search
       filter_by_title
       filter_by_description
@@ -10,6 +12,7 @@ class ApisSearchService
       limit_results
       @projects
     end
+    
     private
     def filter_by_title
       @projects = @projects.where("title LIKE ?", "%#{@params[:title]}%") if @params[:title].present?

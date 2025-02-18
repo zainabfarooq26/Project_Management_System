@@ -27,16 +27,18 @@ module Api
       end
     
       def authorize_admin
-        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.admin?
+        render json: { error: "Not authorized" }, status: :forbidden unless
+         current_user&.admin?
       end
     
       def authorize_manager
-        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.manager? ||
-        current_user&.admin?
+        render json: { error: "Not authorized" }, status: :forbidden unless 
+        current_user&.manager? || current_user&.admin?
       end
     
       def authorize_user
-        render json: { error: "Not authorized" }, status: :forbidden unless current_user&.user? || current_user&.manager? || current_user&.admin?
+        render json: { error: "Not authorized" }, status: :forbidden unless
+         current_user&.user? || current_user&.manager? || current_user&.admin?
       end
     end
   end

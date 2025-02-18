@@ -25,7 +25,8 @@ class Manager::CommentsController < ApplicationController
   def update
     if @comment.update(comment_params)
       respond_to do |format|
-        format.html { redirect_to manager_client_projects_path(@client, @project), notice: 'Comment updated successfully.' }
+        format.html { redirect_to manager_client_projects_path(@client, @project),
+         notice: 'Comment updated successfully.'}
         format.js  
       end
     else
@@ -35,7 +36,8 @@ class Manager::CommentsController < ApplicationController
 
   def destroy
     @comment.destroy
-    redirect_to manager_client_projects_path(@client, @project), notice: 'Comment deleted successfully.'
+    redirect_to manager_client_projects_path(@client, @project), notice: 
+    'Comment deleted successfully.'
   end
 
   private

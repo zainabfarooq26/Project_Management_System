@@ -29,7 +29,7 @@ class Manager::ProjectsController < ApplicationController
     else
       flash[:alert] = 'Failed to remove user from the project.'
     end
-    redirect_to assign_users_manager_client_project_path(@project.client, @project)
+     redirect_to assign_users_manager_client_project_path(@project.client, @project)
   end
 
   def index
@@ -45,7 +45,6 @@ class Manager::ProjectsController < ApplicationController
   def create
     @project = @client.projects.build(project_params)
     @project.manager = current_user
-
     if @project.save
       redirect_to manager_client_projects_path(@client), notice: 'Project created successfully.'
     else
