@@ -18,12 +18,13 @@ class ClientsSearchService
       when "address"
         @clients = @clients.where("clients.address ILIKE ?", query)
       when "project_title"
-        @clients = @clients.joins(:projects).where("projects.title ILIKE ?", query).distinct
+        @clients = @clients.joins(:projects).where("projects.title ILIKE ?",
+         query).distinct
       else
         @clients = @clients.left_joins(:projects).where(
-          "clients.name ILIKE ? OR clients.email ILIKE ? OR clients.phone ILIKE ? OR clients.address ILIKE ? OR projects.title ILIKE ?", 
-          query, query, query, query, query
-        ).distinct
+          "clients.name ILIKE ? OR clients.email ILIKE ? OR clients.phone ILIKE ? 
+          OR clients.address ILIKE ? OR projects.title ILIKE ?", query, query,
+           query, query, query ).distinct
       end
       @clients
     end
