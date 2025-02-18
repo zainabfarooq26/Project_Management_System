@@ -33,9 +33,9 @@ class Manager::ProjectsController < ApplicationController
   end
 
   def index
-      @projects = ProjectsSearchService.new(@client, params[:search_query], params[:search_category], params[:sort])
-                                       .call
-                                       .includes(:users, :manager, time_logs: :user)
+      @projects = ProjectsSearchService.new(@client, params[:search_query],
+       params[:search_category], params[:sort])  .call .includes(:users,
+        :manager, time_logs: :user)
   end
 
   def new

@@ -44,7 +44,8 @@ class Admin::UsersController < ApplicationController
   def toggle_status
       @user.update(active: !@user.active)
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("user_#{@user.id}", partial: "admin/users/user_row", locals: { user: @user }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("user_#{@user.id}"
+        , partial: "admin/users/user_row", locals: { user: @user }) }
         format.html { redirect_to admin_users_path, notice: 'User status updated.' }
       end
   end
@@ -52,7 +53,8 @@ class Admin::UsersController < ApplicationController
   def toggle_manager
     @user.manager? ? @user.user! : @user.manager!
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("user_#{@user.id}", partial: "admin/users/user_row", locals: { user: @user }) }
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("user_#{@user.id}",
+       partial: "admin/users/user_row", locals: { user: @user }) }
       format.html { redirect_to admin_users_path, notice: 'User manager rights updated.' }
     end
   end
@@ -60,12 +62,13 @@ class Admin::UsersController < ApplicationController
   private
   def user_params
       params.require(:user).permit(:name, :email, :role, :password, :password_confirmation)
-    end
+  end
+
   def authenticate_admin!
     redirect_to root_path, alert: 'Access denied.' unless current_user.admin?
   end
+
   def set_user
     @user = User.find(params[:id])
   end
 end
-  

@@ -75,6 +75,7 @@ class Manager::PaymentsController < ApplicationController
   def payment_params
     params.require(:payment).permit(:amount, :paid_on, :status)
   end
+
   def authorize_manager
     redirect_to root_path, alert: 'Unauthorized' unless current_user.manager?
   end
