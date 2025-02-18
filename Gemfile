@@ -4,6 +4,14 @@ source "https://rubygems.org"
 gem "rails", "~> 7.2.0"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
+gem "bootstrap"
+gem "sassc-rails"
+gem "image_processing", "~> 1.2"
+gem "mini_magick"
+gem "devise"
+gem "devise-jwt"
+gem "jsonapi-serializer"
+gem "groupdate"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -55,3 +63,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "sassc", "~> 2.4"
+
+gem "letter_opener", "~> 1.10"
+
+gem "jwt", "~> 2.10"

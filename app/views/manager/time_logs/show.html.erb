@@ -1,0 +1,12 @@
+<h3>Time Logs</h3>
+<ul class="list-group">
+  <% @project.time_logs.each do |time_log| %>
+    <li class="list-group-item">
+      <strong><%= time_log.user.profile.display_name %></strong>: <%= time_log.hours %> hours
+      <% if time_log.user == current_user %>
+        <%= link_to "Edit", edit_manager_client_project_time_log_path(@client, @project, time_log), class: "btn btn-warning btn-sm" %>
+        <%= link_to "Delete", manager_client_project_time_log_path(@client, @project, time_log), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

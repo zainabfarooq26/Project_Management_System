@@ -1,1 +1,10 @@
-this is index page of users
+<h1>User Profile</h1>
+<% @users.each do |user| %>
+  <div class="user-card">
+    <p><strong>Name:</strong> <%= user.profile.name %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Role:</strong> <%= user.role %></p>
+    <!-- You can show more information here based on your user model -->
+  </div>
+<% end %>
+<%= link_to 'Back to Dashboard', root_path, class: 'btn btn-secondary' %>

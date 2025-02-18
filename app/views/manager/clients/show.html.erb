@@ -1,0 +1,34 @@
+<h1 class="mb-4">Client Details</h1>
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h3 class="card-title"><%= @client.name %></h3>
+    <p class="card-text"><strong>Email:</strong> <%= @client.email %></p>
+    <p class="card-text"><strong>Phone:</strong> <%= @client.phone %></p>
+    <p class="card-text"><strong>Address:</strong> <%= @client.address %></p>
+  </div>
+</div>
+<h3 class="mb-3">Projects</h3>
+<% if @client.projects.any? %>
+  <div class="list-group">
+    <% @client.projects.each do |project| %>
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-1"><%= project.title %></h5>
+          <p class="mb-1 text-muted"><%= project.description.truncate(80) %></p>
+        </div>
+        <div>
+          <%= link_to 'View', manager_client_project_path(@client, project), class: 'btn btn-primary btn-sm' %>
+          <% if current_user.manager? %>
+            <%= link_to 'Edit', edit_manager_client_project_path(@client, project), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Delete', manager_client_project_path(@client, project), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-muted">No projects assigned to this client yet.</p>
+<% end %>
+<div class="mt-4">
+  <%= link_to 'Back to Dashboard', manager_clients_path, class: 'btn btn-secondary' %>
+</div>

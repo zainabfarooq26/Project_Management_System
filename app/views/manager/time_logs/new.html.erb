@@ -1,0 +1,8 @@
+<%= form_with(model: [@client, @project, @time_log], url: manager_client_project_time_logs_path(@client, @project), local: true) do |form| %>
+    <div class="form-group">
+      <%= form.label :hours, "Hours Logged" %>
+      <%= form.number_field :hours, class: "form-control", step: 0.1, required: true %>
+    </div>
+    <%= form.submit "Add Time Log", class: "btn btn-primary" %>
+<% end %>
+  

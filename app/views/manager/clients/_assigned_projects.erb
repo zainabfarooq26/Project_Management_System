@@ -1,0 +1,15 @@
+<h3 class="mb-3">Assigned Projects</h3>
+<% if @client.projects.any? %>
+  <ul class="list-group">
+    <% @client.projects.includes(:users).each do |project| %>
+      <li class="list-group-item d-flex justify-content-between">
+        <strong><%= project.name %></strong>
+        <span class="text-muted">
+          <%= project.users.any? ? "Assigned Users: #{project.users.pluck(:name).join(', ')}" : "No users assigned" %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No assigned projects.</p>
+<% end %>

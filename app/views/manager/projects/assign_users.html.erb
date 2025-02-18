@@ -1,0 +1,36 @@
+<div class="card shadow-sm p-4">
+  <h2 class="mb-4 text-primary">Assign Users to <%= @project.title %></h2>
+  <%= form_with model: @project, url: assign_users_manager_client_project_path(@project.client, @project), method: :post, class: "needs-validation" do |form| %>
+    <div class="mb-3">
+      <%= form.label :user_ids, "Select Users to Assign", class: "form-label fw-bold" %>
+      <div class="border p-3 rounded bg-light">
+        <% @users.each do |user| %>
+          <div class="form-check">
+            <%= check_box_tag "project[user_ids][]", user.id, @project.users.include?(user), class: "form-check-input" %>
+            <%= label_tag "project[user_ids][]", "#{user.first_name} #{user.last_name} (#{user.email})", class: "form-check-label" %>
+          </div>
+        <% end %>
+      </div>
+      <div class="d-flex justify-content-between">
+        <%= form.submit "Assign Users", class: "btn btn-primary px-4" %>
+        <%= link_to 'Back to Projects', manager_client_projects_path(@project.client), class: "btn btn-secondary px-4" %>
+      </div>
+    </div>
+    <hr class="my-4">
+    <h3 class="mb-3 text-danger">Assigned Users</h3>
+    <% if @project.users.any? %>
+      <ul class="list-group">
+        <% @project.users.each do |user| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-person-circle"></i> <%= user.first_name %> <%= user.last_name %> (<%= user.email %>)</span>
+            <%= link_to "Remove", remove_user_manager_client_project_path(@project.client, @project, user), 
+                data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this user from the project?" }, 
+                class: "btn btn-sm btn-danger" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No users assigned yet.</p>
+    <% end %>
+  <% end %>
+</div>

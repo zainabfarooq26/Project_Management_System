@@ -1,0 +1,23 @@
+<h1><%= @client.new_record? ? 'New Client' : 'Edit Client' %></h1>
+<%= form_with model: @client, url: @client.new_record? ? manager_clients_path : manager_client_path(@client), local: true do |form| %>
+  <div class="mb-3">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :email %>
+    <%= form.email_field :email, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :phone %>
+    <%= form.text_field :phone, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :address %>
+    <%= form.text_area :address, class: "form-control" %>
+  </div>
+  <%= form.submit "Save", class: "btn btn-primary" %>
+  <%= link_to "Cancel", manager_clients_path, class: "btn btn-secondary" %>
+  <%= link_to 'Back to dashboard', manager_clients_path, class: 'btn btn-info' %>
+</div>
+<% end %>

@@ -1,0 +1,50 @@
+<h1 class="mb-4">Project Details</h1>
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h3 class="card-title"><%= @project.title %></h3>
+    <p class="card-text"><strong>Description:</strong> <%= @project.description %></p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title">Total Hours Spent</h4>
+        <p class="fs-4 text-primary"><%= @project.time_logs.sum(:hours) %> hours</p>
+      </div>
+    </div>
+  </div>
+  <% if current_user.manager? %>  
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="card-title">Total Payments</h4>
+          <p class="fs-4 text-success">$<%= @project.payments.sum(:amount) %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+</div>
+<h3 class="mb-3">Recent Comments</h3>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <% if @comments.any? %>
+      <ul class="list-group">
+        <% @comments.limit(5).each do |comment| %>
+          <li class="list-group-item">
+            <strong>
+              <%= "#{comment.user.profile.first_name} #{comment.user.profile.last_name}" if comment.user.profile %>
+            </strong>: <%= comment.content %>
+            <small class="text-muted">(on <%= comment.created_at.strftime("%d %b %Y") %>)</small>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No comments yet.</p>
+    <% end %>
+  </div>
+</div>
+<div class="mt-4">
+  <%= link_to 'Back to Dashboard', manager_client_projects_path(@client), class: 'btn btn-secondary' %>
+</div>

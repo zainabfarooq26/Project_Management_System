@@ -1,0 +1,24 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <h4 class="mb-0">User Profile</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <% if @profile.profile_photo.attached? %>
+            <%= image_tag @profile.profile_photo, class: "img-fluid rounded-circle", width: 150, height: 150 %>
+          <% else %>
+            <%= image_tag "default_profile.png", class: "img-fluid rounded-circle", width: 150, height: 150 %>
+          <% end %>
+        </div>
+        <div class="col-md-8 text-white" style="background-color: black; padding: 15px; border-radius: 5px;">
+          <h5><%= @profile.first_name %> <%= @profile.last_name %></h5>
+          <p><strong>Email:</strong> <%= current_user.email %></p>
+          <p><strong>Joined:</strong> <%= current_user.created_at.strftime("%B %d, %Y") %></p>
+          <a href="<%= edit_profile_path %>" class="btn btn-outline-light me-3">Edit Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
